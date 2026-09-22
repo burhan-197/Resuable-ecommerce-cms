@@ -1,0 +1,12 @@
+StorefrontCMS Lite Community Source License
+Version 1.0 — 2026
+
+Copyright (c) 2026. All rights reserved except as expressly granted below.
+
+This license applies only to the StorefrontCMS Lite / Community Edition in this repository. It does not apply to any paid, Full, Pro, marketplace, private, or commercial edition.
+
+You may view, study, download, run and modify the Lite Edition for personal, educational, portfolio, testing and evaluation purposes. Public forks are allowed when this license and the original copyright notice remain included.
+
+Without a separate commercial license, you may not sell, sublicense, rent, commercially redistribute, or use the Lite Edition as the source code for paid client work or a commercial production store. You may not redistribute paid-edition code or represent the original Lite source as your own original product.
+
+Third-party libraries remain subject to their own licenses. The software is provided "as is", without warranty of any kind.

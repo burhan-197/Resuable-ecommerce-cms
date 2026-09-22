@@ -1,0 +1,129 @@
+<%- include('../partials/layout-start', {
+  title: `Order Confirmed — ${settings.store.name || 'Store'}`,
+  css: '/css/ordercompleted.css',
+  script: '/js/ordercompleted.js',
+  announcement: settings.content?.navigation?.announcementText || (settings.shipping.enabled && settings.shipping.freeShipping.enabled
+    ? '🚚 Free shipping on orders over ' + formatMoney(settings.shipping.freeShipping.threshold, settings) + ' — Shop with confidence'
+    : null),
+  active: 'cart',
+  cartCount: cartCount,
+  noCanonical: true,
+  breadcrumbs: [],
+  canonical: typeof canonical !== 'undefined' ? canonical : undefined
+}) %>
+<% const orderCopy = settings.content?.storefrontPages?.orderComplete || {}; %>
+
+<div class="success-container">
+  <div class="success-content">
+    <!-- Success Header -->
+    <div class="success-header">
+      <div class="success-icon">✓</div>
+      <div class="success-eyebrow"><%= orderCopy.eyebrow || 'ORDER RECEIVED' %></div><h1 class="success-title"><%= orderCopy.heading || 'Your order is confirmed' %></h1>
+      <p class="success-subtitle"><%= orderCopy.description || `Thank you for ordering from ${settings.store.name || 'our store'}.` %></p>
+    </div>
+
+    <!-- Order Number -->
+    <div class="order-number-box">
+      <div class="order-number-label">Order Number</div>
+      <div class="order-number" id="orderNumber"><%= orderData.orderNumber || '—' %></div>
+      <button class="copy-btn" onclick="copyOrderNumber()">Copy Order Number</button>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="order-content-grid">
+      <!-- Left Column: Items -->
+      <div class="order-items-section">
+        <h4 class="section-title">📦 <%= orderCopy.itemsHeading || 'Order Items' %></h4>
+        <div class="items-table-wrapper">
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Option</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="itemsTableBody">
+              <% if (!orderData.items || !orderData.items.length) { %>
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 20px; color: var(--text-lt);">No items in order</td>
+                </tr>
+              <% } else { %>
+                <% orderData.items.forEach(item => { %>
+                  <tr>
+                    <td class="item-col-name"><%= item.name || '—' %></td>
+                    <td class="item-col-weight"><%= item.variant || '—' %></td>
+                    <td class="item-col-qty"><%= item.qty || 0 %></td>
+                    <td class="item-col-price"><%= formatMoney(item.price || 0, settings) %></td>
+                    <td class="item-col-total"><%= formatMoney((item.price || 0) * (item.qty || 0), settings) %></td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right Column: Summary & Address -->
+      <div class="order-summary-section">
+        <!-- Order Summary -->
+        <div class="summary-card">
+          <h4 class="section-title">💰 Order Summary</h4>
+          <div class="summary-content">
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <span id="summarySubtotal"><%= formatMoney(orderData.summary?.subtotal || 0, settings) %></span>
+            </div>
+            <div class="summary-line">
+              <span>Shipping</span>
+              <span id="summaryShipping"><%= (orderData.summary?.shipping || 0) > 0 ? formatMoney(orderData.summary.shipping, settings) : 'Free' %></span>
+            </div>
+            <div class="summary-line summary-total">
+              <span>Total Amount</span>
+              <span id="summaryTotal"><%= formatMoney(orderData.summary?.total || 0, settings) %></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer / Delivery Details -->
+        <div class="address-card">
+          <h4 class="section-title">📍 Order Details</h4>
+          <div class="address-content">
+            <% if (orderData.customerName) { %><p id="deliveryName"><%= orderData.customerName %></p><% } %>
+            <% if (orderData.address) { %><p id="deliveryAddress"><%= orderData.address %></p><% } %>
+            <% if (orderData.city || orderData.state) { %><p id="deliveryCity"><%= [orderData.city, orderData.state].filter(Boolean).join(', ') %></p><% } %>
+            <% if (orderData.postalCode) { %><p id="deliveryPostalCode"><%= orderData.postalCode %></p><% } %>
+            <% if (orderData.email) { %><p id="deliveryEmail"><%= orderData.email %></p><% } %>
+            <% if (orderData.phone) { %><p id="deliveryPhone"><%= orderData.phone %></p><% } %>
+            <% if (orderData.instructions) { %><p id="deliveryInstructions"><%= orderData.instructions %></p><% } %>
+          </div>
+        </div>
+
+        <!-- Payment Info -->
+        <div class="payment-card">
+          <h4 class="section-title">💳 Payment Method</h4>
+          <div class="payment-content">
+            <p id="paymentMethod"><%= orderData.paymentMethod || '—' %></p>
+            <% if (orderData.paymentMethod === 'Manual Payment') { %><p style="margin-top:6px;font-size:.82rem;color:var(--text-lt)"><%= settings.payments.manual.instructions %></p><% } %>
+            <p style="margin-top:6px;font-size:.82rem;color:var(--text-lt)">Payment status: <strong><%= (orderData.paymentStatus || 'pending').charAt(0).toUpperCase() + (orderData.paymentStatus || 'pending').slice(1) %></strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <a href="/products" class="btn btn-secondary"><%= orderCopy.continueShoppingLabel || 'Continue Shopping' %></a>
+    </div>
+  
+    <!-- Contact Support -->
+    <div class="contact-support">
+      <p><%= orderCopy.supportLabel || 'Keep your order number for reference.' %></p>
+    </div>
+
+  </div>
+</div>
+
+<%- include('../partials/layout-end', { script: '/js/ordercompleted.js' }) %>

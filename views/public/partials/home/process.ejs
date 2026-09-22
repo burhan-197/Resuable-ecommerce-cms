@@ -1,0 +1,22 @@
+<% const section = homepage.process; const steps = (section.steps || []).filter(step => step && (step.title || step.description)); %>
+<section class="process">
+  <div class="process-header">
+    <% if (section.eyebrow) { %><div class="section-label" style="justify-content:center"><%= section.eyebrow %></div><% } %>
+    <% if (section.heading || section.highlight) { %><h2 class="section-title"><%= section.heading %><% if (section.highlight) { %> <em><%= section.highlight %></em><% } %></h2><% } %>
+    <% if (section.subheading) { %><p class="section-subtitle"><%= section.subheading %></p><% } %>
+  </div>
+  <% if (steps.length) { %>
+  <div class="process-grid">
+    <% steps.forEach((step, index) => { %>
+    <div class="process-step">
+      <div class="process-icon-wrap">
+        <%= step.icon || '✦' %>
+        <span class="process-num"><%= String(index + 1).padStart(2, '0') %></span>
+      </div>
+      <% if (step.title) { %><div class="process-step-title"><%= step.title %></div><% } %>
+      <% if (step.description) { %><p class="process-step-desc"><%= step.description %></p><% } %>
+    </div>
+    <% }) %>
+  </div>
+  <% } %>
+</section>

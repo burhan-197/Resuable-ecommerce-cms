@@ -1,0 +1,171 @@
+<%
+  const categoryNavigationStyle = settings.navigation?.categoryMenu?.style === 'sidebar' ? 'sidebar' : 'dropdown';
+  const categoryTree = Array.isArray(storeCategoryTree) ? storeCategoryTree : [];
+  const navCopy = settings.content?.navigation || {};
+  const homeLabel = navCopy.homeLabel || 'Home';
+  const productsLabel = navCopy.productsLabel || 'Products';
+  const cartLabel = navCopy.cartLabel || 'Cart';
+  const sidebarEyebrow = navCopy.sidebarEyebrow || 'NAVIGATION';
+  const sidebarHeading = navCopy.sidebarHeading || 'Browse Store';
+%>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="nav-left">
+    <% if (categoryNavigationStyle === 'sidebar') { %>
+      <button class="nav-toggle nav-toggle--sidebar" id="categoryDrawerOpen" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="categoryDrawer">
+        ☰
+      </button>
+    <% } else { %>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+        ☰
+      </button>
+    <% } %>
+
+    <%
+      const brandPrefs = settings.store.branding || {};
+      const showBrandLogo = brandPrefs.showLogo !== false && Boolean(settings.store.logo);
+      const showBrandName = brandPrefs.showName !== false && Boolean(settings.store.name);
+      const showBrandTagline = brandPrefs.showTagline !== false && Boolean(settings.store.tagline);
+      const hasBrandText = showBrandName || showBrandTagline;
+      const logoSize = ['small', 'medium', 'large', 'custom'].includes(brandPrefs.logoSize) ? brandPrefs.logoSize : 'medium';
+      const customLogoSize = Math.min(80, Math.max(28, Number(brandPrefs.logoCustomSize) || 46));
+    %>
+    <% if (showBrandLogo || hasBrandText) { %>
+      <a href="/" class="nav-brand-link">
+        <% if (showBrandLogo) { %>
+          <img src="<%= responsiveImageUrl(settings.store.logo, 320) %>" alt="<%= settings.store.name || 'Store' %> logo" class="nav-brand-logo nav-brand-logo--<%= logoSize %>" <%- logoSize === 'custom' ? `style="width:${customLogoSize}px;height:${customLogoSize}px"` : '' %>/>
+        <% } %>
+        <% if (hasBrandText) { %>
+          <div class="nav-brand <%= !showBrandName && showBrandTagline ? 'nav-brand--tagline-only' : '' %>">
+            <% if (showBrandName) { %><span class="nav-brand-main"><%= settings.store.name %></span><% } %>
+            <% if (showBrandTagline) { %><span class="nav-brand-sub"><%= settings.store.tagline %></span><% } %>
+          </div>
+        <% } %>
+      </a>
+    <% } %>
+  </div>
+
+  <% if (categoryNavigationStyle !== 'sidebar') { %>
+  <div class="nav-menu" id="navMenu">
+    <ul class="nav-links">
+      <li><a href="/" class="<%= active === 'home' ? 'active' : '' %>"><%= homeLabel %></a></li>
+
+      <li class="dropdown category-dropdown">
+        <button class="dropdown-toggle <%= active === 'products' ? 'active' : '' %>" aria-expanded="false"><%= productsLabel %></button>
+        <ul class="dropdown-menu category-dropdown-menu">
+          <li><a href="/products">All Products</a></li>
+          <% categoryTree.forEach(category => { %>
+            <% if (category.children && category.children.length) { %>
+              <li class="category-menu-parent">
+                <a href="/products/category/<%= category.slug %>" class="category-menu-parent-link">
+                  <span><%= category.icon ? `${category.icon} ` : '' %><%= category.name %></span>
+                  <span class="category-menu-arrow" aria-hidden="true">›</span>
+                </a>
+                <ul class="category-submenu">
+                  <li><a href="/products/category/<%= category.slug %>" class="category-view-all">View All <%= category.name %></a></li>
+                  <% category.children.forEach(child => { %>
+                    <li><a href="/products/category/<%= child.slug %>"><%= child.icon ? `${child.icon} ` : '' %><%= child.name %></a></li>
+                  <% }) %>
+                </ul>
+              </li>
+            <% } else { %>
+              <li><a href="/products/category/<%= category.slug %>"><%= category.icon ? `${category.icon} ` : '' %><%= category.name %></a></li>
+            <% } %>
+          <% }) %>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+  <% } %>
+
+  <div class="nav-utility">
+    <div class="nav-actions">
+      <% if (settings.features.productSearch.enabled) { %>
+      <div class="nav-search-wrap">
+        <button class="nav-search-btn" id="navSearchBtn" type="button" aria-label="Open search" aria-expanded="false" aria-controls="navSearchPanel">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+        </button>
+        <div class="nav-search-panel" id="navSearchPanel" aria-hidden="true">
+          <form class="nav-search-form" id="navSearchForm" autocomplete="off">
+            <label class="sr-only" for="navSearchInput">Search products</label>
+            <input class="nav-search-input" id="navSearchInput" type="search" placeholder="<%= settings.content?.navigation?.searchPlaceholder || 'Search products...' %>" />
+            <button class="nav-search-submit" type="submit">Search</button>
+          </form>
+          <div class="nav-search-meta" id="navSearchMeta">Start typing to search products.</div>
+          <div class="nav-search-results" id="navSearchResults" role="listbox" aria-label="Search results"></div>
+        </div>
+      </div>
+      <% } %>
+      <div class="nav-cart-wrap">
+        <button class="nav-cart-btn" id="navCartBtn" type="button" aria-label="Open cart">
+          🛒 <%= cartLabel %> <span class="cart-count" id="navCartCount"><%= cartCount %></span>
+        </button>
+        <div class="cart-popover" id="cartPopover"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<% if (categoryNavigationStyle === 'sidebar') { %>
+<div class="category-drawer-overlay" id="categoryDrawerOverlay" hidden></div>
+<aside class="category-drawer" id="categoryDrawer" aria-hidden="true" aria-label="Main navigation">
+  <div class="category-drawer-head">
+    <div>
+      <span class="category-drawer-eyebrow"><%= sidebarEyebrow %></span>
+      <h2><%= sidebarHeading %></h2>
+    </div>
+    <button class="category-drawer-close" id="categoryDrawerClose" type="button" aria-label="Close navigation menu">×</button>
+  </div>
+  <div class="category-drawer-body">
+    <nav class="category-drawer-primary" aria-label="Sidebar navigation">
+      <a href="/" class="category-drawer-link category-drawer-main-link <%= active === 'home' ? 'active' : '' %>">
+        <span class="category-drawer-label"><span class="category-drawer-icon">⌂</span><%= homeLabel %></span>
+        <span aria-hidden="true">›</span>
+      </a>
+
+      <div class="category-drawer-section-title">Categories</div>
+      <a href="/products" class="category-drawer-all <%= active === 'products' ? 'active' : '' %>"><span>🛒</span><span><%= productsLabel %></span></a>
+      <% if (categoryTree.length) { %>
+        <% categoryTree.forEach(category => { %>
+          <% if (category.children && category.children.length) { %>
+            <details class="category-drawer-group">
+              <summary>
+                <span class="category-drawer-label"><span class="category-drawer-icon"><%= category.icon || '📦' %></span><%= category.name %></span>
+                <span class="category-drawer-chevron" aria-hidden="true">›</span>
+              </summary>
+              <div class="category-drawer-subcategories">
+                <a href="/products/category/<%= category.slug %>" class="category-drawer-view-all">View All <%= category.name %></a>
+                <% category.children.forEach(child => { %>
+                  <a href="/products/category/<%= child.slug %>"><span><%= child.icon || '↳' %></span><%= child.name %></a>
+                <% }) %>
+              </div>
+            </details>
+          <% } else { %>
+            <a href="/products/category/<%= category.slug %>" class="category-drawer-link">
+              <span class="category-drawer-label"><span class="category-drawer-icon"><%= category.icon || '📦' %></span><%= category.name %></span>
+              <span aria-hidden="true">›</span>
+            </a>
+          <% } %>
+        <% }) %>
+      <% } else { %>
+        <div class="category-drawer-empty">No categories are available yet.</div>
+      <% } %>
+
+    </nav>
+  </div>
+</aside>
+<% } %>
+
+<div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="cart-drawer-head">
+    <h2>Your Cart</h2>
+    <button class="cart-drawer-close" id="cartDrawerClose" type="button" aria-label="Close cart">×</button>
+  </div>
+  <div class="cart-drawer-body" id="cartDrawerBody"></div>
+  <div class="cart-drawer-footer" id="cartDrawerFooter"></div>
+</aside>

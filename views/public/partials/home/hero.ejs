@@ -1,0 +1,27 @@
+<% const hero = homepage.hero; const heroImage = hero.image ? responsiveImageUrl(hero.image, 1600) : ''; const heroButtonStyle = hero.buttonStyle || {}; %>
+<section class="hero <%= heroImage ? '' : 'hero-no-image' %>" <%- heroImage ? `style="background-image:url('${heroImage.replace(/'/g, '%27')}')"` : '' %>>
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-leaf-bg"></div>
+  <div class="hero-content">
+    <% const heroEyebrow = hero.eyebrow || settings.store.tagline || ''; %>
+    <% if (heroEyebrow) { %><div class="hero-eyebrow"><%= heroEyebrow %></div><% } %>
+    <% if (hero.heading || hero.highlight || hero.headingAfter) { %>
+      <h1 class="hero-title">
+        <% if (hero.heading) { %><%= hero.heading %><% } %>
+        <% if (hero.highlight) { %><% if (hero.heading) { %><br/><% } %><em><%= hero.highlight %></em><% } %>
+        <% if (hero.headingAfter) { %><% if (hero.heading || hero.highlight) { %><br/><% } %><%= hero.headingAfter %><% } %>
+      </h1>
+    <% } %>
+    <% const heroDescription = hero.description || settings.store.description || ''; %>
+    <% if (heroDescription) { %><p class="hero-desc"><%= heroDescription %></p><% } %>
+    <% if (hero.buttonText && hero.buttonUrl) { %>
+      <div class="hero-cta-row">
+        <a href="<%= hero.buttonUrl %>" class="btn-primary <%= heroButtonStyle.useCustomColors ? 'has-custom-button-colors' : '' %>"<% if (heroButtonStyle.useCustomColors) { %> style="--custom-button-bg:<%= heroButtonStyle.background %>;--custom-button-text:<%= heroButtonStyle.text %>;--custom-button-hover-bg:<%= heroButtonStyle.hoverBackground %>;--custom-button-hover-text:<%= heroButtonStyle.hoverText %>"<% } %>>
+          <%= hero.buttonText %>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    <% } %>
+  </div>
+  <div class="hero-visual-overlay"></div>
+</section>

@@ -1,0 +1,54 @@
+<%- include('../partials/layout-start', {
+  title: `Policies — ${settings.store.name || 'Store'}`,
+  css: '/css/policies.css',
+  script: null,
+  announcement: null,
+  active: 'policies',
+  cartCount: cartCount,
+  canonical: typeof canonical !== 'undefined' ? canonical : undefined
+}) %>
+
+<%
+  const policyContent = settings.content && settings.content.policies ? settings.content.policies : {};
+  const policyParagraphs = value => String(value || '').split(/\n\s*\n/).map(text => text.trim()).filter(Boolean);
+%>
+
+<section class="policy-hero">
+  <div class="policy-hero-inner">
+    <% if (policyContent.heroEyebrow) { %><div class="section-label"><%= policyContent.heroEyebrow %></div><% } %>
+    <h1 class="policy-title"><%= policyContent.heroHeading || '' %><% if (policyContent.heroHighlight) { %> <em><%= policyContent.heroHighlight %></em><% } %></h1>
+    <% if (policyContent.intro) { %><p class="policy-intro"><%= policyContent.intro %></p><% } %>
+    <nav class="policy-nav" aria-label="Policy sections">
+      <a href="#shipping-policy"><%= policyContent.shippingTitle || 'Shipping Policy' %></a>
+      <a href="#return-policy"><%= policyContent.returnTitle || 'Return Policy' %></a>
+      <a href="#privacy-policy"><%= policyContent.privacyTitle || 'Privacy Policy' %></a>
+      <% if (policyContent.terms && policyContent.terms.enabled) { %><a href="#terms-conditions"><%= policyContent.terms.title || 'Terms & Conditions' %></a><% } %>
+    </nav>
+  </div>
+</section>
+
+<section class="policy-page-content">
+  <section class="policy-card" id="shipping-policy">
+    <div class="policy-card-head"><div class="policy-kicker">01</div><h2><%= policyContent.shippingTitle || 'Shipping Policy' %></h2></div>
+    <% policyParagraphs(policyContent.shippingBody).forEach(function(paragraph) { %><p><%= paragraph %></p><% }); %>
+  </section>
+
+  <section class="policy-card" id="return-policy">
+    <div class="policy-card-head"><div class="policy-kicker">02</div><h2><%= policyContent.returnTitle || 'Return Policy' %></h2></div>
+    <% policyParagraphs(policyContent.returnBody).forEach(function(paragraph) { %><p><%= paragraph %></p><% }); %>
+  </section>
+
+  <section class="policy-card" id="privacy-policy">
+    <div class="policy-card-head"><div class="policy-kicker">03</div><h2><%= policyContent.privacyTitle || 'Privacy Policy' %></h2></div>
+    <% policyParagraphs(policyContent.privacyBody).forEach(function(paragraph) { %><p><%= paragraph %></p><% }); %>
+  </section>
+
+  <% if (policyContent.terms && policyContent.terms.enabled) { %>
+  <section class="policy-card" id="terms-conditions">
+    <div class="policy-card-head"><div class="policy-kicker">04</div><h2><%= policyContent.terms.title || 'Terms & Conditions' %></h2></div>
+    <% policyParagraphs(policyContent.terms.body).forEach(function(paragraph) { %><p><%= paragraph %></p><% }); %>
+  </section>
+  <% } %>
+</section>
+
+<%- include('../partials/layout-end', { script: null }) %>

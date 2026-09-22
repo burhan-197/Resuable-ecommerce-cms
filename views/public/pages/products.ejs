@@ -1,0 +1,114 @@
+<%- include('../partials/layout-start', {
+  title: `Products — ${settings.store.name || 'Store'}`,
+  metaTitle: typeof metaTitle !== 'undefined' ? metaTitle : undefined,
+  metaDesc: typeof metaDesc !== 'undefined' ? metaDesc : undefined,
+  css: '/css/products.css',
+  script: '/js/products-live.js',
+  announcement: null,
+  active: 'products',
+  cartCount: cartCount,
+  canonical: typeof canonical !== 'undefined' ? canonical : undefined
+}) %>
+<% const productsPageContent = settings.content?.storefrontPages?.products || {}; %>
+
+<div id="productsData"
+     data-products="<%= encodeURIComponent(JSON.stringify(products)) %>"
+     data-current-category="<%= currentCategory %>"
+     data-price-max="<%= priceMax %>"
+     data-categories="<%= encodeURIComponent(JSON.stringify(categories || [])) %>"
+     data-search-query="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+     data-copy="<%= encodeURIComponent(JSON.stringify(productsPageContent)) %>"
+     hidden></div>
+
+<div class="page-header<%= productsPageContent.heroBackgroundType === 'image' && productsPageContent.heroBackgroundImage ? ' has-hero-image' : '' %>" style="--page-hero-start:<%= productsPageContent.heroBackgroundStart || '#1b3e28' %>;--page-hero-middle:<%= productsPageContent.heroBackgroundMiddle || '#254d34' %>;--page-hero-end:<%= productsPageContent.heroBackgroundEnd || '#1a3a25' %>;<% if (productsPageContent.heroBackgroundType === 'image' && productsPageContent.heroBackgroundImage) { %>--page-hero-image:url(<%= JSON.stringify(productsPageContent.heroBackgroundImage) %>);<% } %>">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><%= productsPageContent.breadcrumbHomeLabel || 'Home' %> <span>/</span> <span style="color:var(--gold-lt)"><%= productsPageContent.breadcrumbProductsLabel || 'Products' %></span></div>
+    <h1><%= productsPageContent.headingBefore || 'Our' %> <em><%= productsPageContent.headingHighlight || 'Products' %></em></h1>
+    <div class="page-header-meta">
+      <span class="product-count" id="headerCount"><%= productsPageContent.showingPrefix || 'Showing' %> <%= totalProducts %> <%= totalProducts === 1 ? (productsPageContent.productSingularLabel || 'product') : (productsPageContent.productPluralLabel || 'products') %></span>
+    </div>
+  </div>
+</div>
+
+<div class="shop-layout">
+  <aside class="sidebar" id="productFilters">
+    <div class="filter-section">
+      <div class="filter-title"><%= productsPageContent.sortTitle || 'Sort By' %> <span class="filter-title-arrow">▾</span></div>
+      <div class="filter-body">
+        <select class="sort-select" id="sortSelect">
+          <option value="default"><%= productsPageContent.sortFeaturedLabel || 'Featured' %></option>
+          <option value="price-asc"><%= productsPageContent.sortPriceLowLabel || 'Price: Low to High' %></option>
+          <option value="price-desc"><%= productsPageContent.sortPriceHighLabel || 'Price: High to Low' %></option>
+          <option value="name-asc"><%= productsPageContent.sortNameLabel || 'Name: A–Z' %></option>
+          <option value="newest"><%= productsPageContent.sortNewestLabel || 'Newest First' %></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title" onclick="toggleSection(this)"><%= productsPageContent.categoryTitle || 'Category' %> <span class="filter-title-arrow open">▾</span></div>
+      <div class="filter-body">
+        <div class="category-list" id="categoryList">
+          <div class="cat-item <%= currentCategory === 'all' ? 'active' : '' %>" data-cat="all">
+            <span><span class="cat-icon">🛒</span><%= productsPageContent.allProductsLabel || 'All Products' %></span>
+            <span class="cat-count"><%= categorySummary.all || 0 %></span>
+          </div>
+          <% (categories || []).forEach(category => { %>
+            <div class="cat-item <%= Number(category.depth || 0) > 0 ? 'subcategory' : '' %> <%= currentCategory === category.slug ? 'active' : '' %>" data-cat="<%= category.slug %>">
+              <span><% if (Number(category.depth || 0) > 0) { %><span class="cat-tree-branch" aria-hidden="true">↳</span><% } %><span class="cat-icon"><%= category.icon || '📦' %></span><%= category.name %></span>
+              <span class="cat-count"><%= categorySummary[category.slug] || 0 %></span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title" onclick="toggleSection(this)"><%= productsPageContent.priceRangeTitle || 'Price Range' %> <span class="filter-title-arrow open">▾</span></div>
+      <div class="filter-body price-range">
+        <div class="price-inputs">
+          <input class="price-input" id="priceMin" type="number" placeholder="Min" min="0" value="0"/>
+          <input class="price-input" id="priceMax" type="number" placeholder="Max" min="0" value="<%= priceMax %>"/>
+        </div>
+        <input type="range" class="price-slider" id="priceSlider" min="0" max="<%= priceMax %>" value="<%= priceMax %>"/>
+        <div class="price-label"><span><%= formatMoney(0, settings) %></span><span><%= formatMoney(priceMax, settings) %></span></div>
+      </div>
+    </div>
+
+
+
+    <button class="clear-btn" onclick="clearFilters()">✕ <%= productsPageContent.clearFiltersLabel || 'Clear All Filters' %></button>
+  </aside>
+
+  <div class="filter-backdrop" id="filterBackdrop" onclick="toggleMobileFilters(false)" aria-hidden="true"></div>
+
+  <main class="products-area">
+    <div class="products-toolbar">
+      <div class="results-count" id="resultsCount"><strong><%= totalProducts %></strong> products found</div>
+      <button class="filter-toggle-btn toolbar-filter-btn" id="filterToggleBtn" type="button" aria-expanded="false" aria-controls="productFilters" onclick="toggleMobileFilters()">
+        <span class="filter-toggle-icon">☰</span>
+        <span><%= productsPageContent.filtersLabel || 'Filters' %></span>
+      </button>
+      <div class="view-toggles">
+        <button class="view-btn active" id="gridViewBtn" type="button" onclick="setView('grid')" title="Grid view">
+          <svg viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6"/><rect x="8" y="0" width="6" height="6"/><rect x="0" y="8" width="6" height="6"/><rect x="8" y="8" width="6" height="6"/></svg>
+        </button>
+        <button class="view-btn" id="listViewBtn" type="button" onclick="setView('list')" title="List view">
+          <svg viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="14" height="2.5"/><rect x="0" y="5.5" width="14" height="2.5"/><rect x="0" y="11" width="14" height="2.5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="active-filters" id="activeFilters"></div>
+    <div class="products-grid" id="productsGrid">
+      <div class="empty-state products-loading" aria-live="polite">
+        <div class="empty-state-icon">⏳</div>
+        <h3><%= productsPageContent.loadingHeading || 'Loading products...' %></h3>
+        <p><%= productsPageContent.loadingDescription || 'Please wait while the catalog is prepared.' %></p>
+      </div>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </main>
+</div>
+
+<%- include('../partials/layout-end', { script: '/js/products-live.js' }) %>

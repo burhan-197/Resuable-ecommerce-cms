@@ -1,0 +1,2 @@
+const express=require('express');const c=require('../controllers/storefrontController');const o=require('../controllers/orderController');const router=express.Router();
+router.get('/',c.home);router.get('/products',c.productsPage);router.get('/products/category/:slug',c.productsPage);router.get('/products/:slug',c.detail);router.get('/cart',c.cart);router.get('/checkout',c.checkout);router.get('/order-complete',o.complete);router.get('/policies',c.policies);module.exports=router;

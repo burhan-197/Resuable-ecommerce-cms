@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order <%= order.id %> — <%= settings.store.name || 'Store' %> Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminOrders.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminShared.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminLite.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+<%- include('../partials/sidebar') %>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">Order #<%= order.id %></div><div class="topbar-sub"><%= order.customer %></div></div>
+    <a class="btn-view lite-back" href="/admin/orders">← Back to Orders</a>
+  </div>
+
+  <div class="content">
+    <% if (error) { %><div class="lite-error"><%= error %></div><% } %>
+    <div class="lite-order-grid">
+      <section class="panel lite-panel-pad">
+        <div class="info-block">
+          <div class="info-label">Customer & Delivery</div>
+          <div class="info-row"><span class="info-key">Customer</span><span class="info-val"><%= order.customer %></span></div>
+          <div class="info-row"><span class="info-key">Phone</span><span class="info-val"><%= order.phone %></span></div>
+          <% if (order.email) { %><div class="info-row"><span class="info-key">Email</span><span class="info-val"><%= order.email %></span></div><% } %>
+          <div class="info-row"><span class="info-key">Address</span><span class="info-val"><%= [order.address, order.city, order.state, order.postalCode].filter(Boolean).join(', ') %></span></div>
+          <% if (order.instructions) { %><div class="info-row"><span class="info-key">Notes</span><span class="info-val"><%= order.instructions %></span></div><% } %>
+        </div>
+
+        <div class="divider"></div>
+        <div class="info-block" style="margin-bottom:0">
+          <div class="info-label">Payment</div>
+          <div class="info-row"><span class="info-key">Method</span><span class="info-val"><%= order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Manual Payment' %></span></div>
+          <div class="info-row"><span class="info-key">Status</span><span class="info-val"><%= order.paymentStatus %></span></div>
+          <div class="info-row"><span class="info-key">Total</span><span class="info-val"><%= formatMoney(order.total, settings) %></span></div>
+        </div>
+      </section>
+
+      <section class="panel lite-panel-pad">
+        <div class="info-label">Order Status</div>
+        <div style="margin-bottom:14px"><span class="status-pill <%= order.status %>"><%= order.status %></span></div>
+        <form method="post" action="/admin/orders/<%= order._id %>/status" class="status-update-row lite-status-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <select class="status-select" name="status" <%= order.status === 'cancelled' ? 'disabled' : '' %>>
+            <% ['pending','processing','shipped','delivered','cancelled'].forEach(status => { %><option value="<%= status %>" <%= order.status === status ? 'selected' : '' %>><%= status.charAt(0).toUpperCase() + status.slice(1) %></option><% }) %>
+          </select>
+          <button class="btn-update" type="submit" <%= order.status === 'cancelled' ? 'disabled' : '' %>>Update Status</button>
+        </form>
+        <% if (order.status === 'cancelled') { %><div class="lite-muted" style="margin-top:10px">Cancelled orders cannot be reopened. Stock has been restored once.</div><% } %>
+      </section>
+    </div>
+
+    <section class="panel" style="margin-top:20px">
+      <div class="lite-panel-heading">Order Items</div>
+      <table class="orders-table">
+        <thead><tr><th>Product</th><th>Option</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+        <tbody>
+          <% order.items.forEach(item => { %><tr><td><%= item.name %></td><td><%= item.variant || 'Standard' %></td><td><%= item.qty %></td><td><%= formatMoney(item.price, settings) %></td><td class="order-amount"><%= formatMoney(item.price * item.qty, settings) %></td></tr><% }) %>
+        </tbody>
+      </table>
+      <div class="lite-order-total">Total: <%= formatMoney(order.total, settings) %></div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

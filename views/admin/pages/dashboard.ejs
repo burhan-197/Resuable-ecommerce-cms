@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — <%= settings.store.name || 'Store' %> Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminDashboard.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminShared.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+<%- include('../partials/sidebar') %>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-sub">Lite Edition — essential store management</div>
+    </div>
+    <div class="topbar-right"><a href="/" class="topbar-store-btn" target="_blank" rel="noopener">🏪 View Store</a></div>
+  </div>
+
+  <div class="content">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="stat-card green"><div class="stat-icon">🛍️</div><div class="stat-label">Products</div><div class="stat-value"><%= stats.products %></div><div class="stat-change">Products in your catalogue</div></div>
+      <div class="stat-card gold"><div class="stat-icon">🗂️</div><div class="stat-label">Categories</div><div class="stat-value"><%= stats.categories %></div><div class="stat-change">Store categories</div></div>
+      <div class="stat-card sand"><div class="stat-icon">📦</div><div class="stat-label">Orders</div><div class="stat-value"><%= stats.orders %></div><div class="stat-change">Orders received</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Recent Orders</div><a href="/admin/orders" class="panel-link">View All →</a></div>
+        <% if (recentOrders.length) { %>
+          <table class="orders-table">
+            <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <% recentOrders.forEach(order => { %>
+                <tr>
+                  <td class="order-id">#<%= order.id %></td>
+                  <td class="order-customer"><%= order.customer %></td>
+                  <td class="order-amount"><%= formatMoney(order.total, settings) %></td>
+                  <td><span class="status-pill <%= order.status %>"><%= order.status %></span></td>
+                  <td><a class="btn-view" href="/admin/orders/<%= order._id %>">View</a></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div style="padding:32px;color:var(--text-lt);text-align:center">No orders yet.</div>
+        <% } %>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Quick Actions</div></div>
+        <div class="quick-grid">
+          <a class="quick-btn" href="/admin/products/new"><span class="quick-btn-icon">＋</span><span>Add Product</span></a>
+          <a class="quick-btn" href="/admin/categories"><span class="quick-btn-icon">🗂️</span><span>Categories</span></a>
+          <a class="quick-btn" href="/admin/products"><span class="quick-btn-icon">🛍️</span><span>Products</span></a>
+          <a class="quick-btn" href="/admin/orders"><span class="quick-btn-icon">📦</span><span>Orders</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

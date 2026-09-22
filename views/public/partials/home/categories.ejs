@@ -1,0 +1,32 @@
+<% const section = homepage.categories; %>
+<section class="categories">
+  <div class="categories-header">
+    <% if (section.eyebrow) { %><div class="section-label" style="justify-content:center"><%= section.eyebrow %></div><% } %>
+    <% if (section.heading || section.highlight) { %><h2 class="section-title"><%= section.heading %><% if (section.highlight) { %> <em><%= section.highlight %></em><% } %></h2><% } %>
+    <% if (section.subheading) { %><p class="section-subtitle"><%= section.subheading %></p><% } %>
+  </div>
+
+  <% if (homeCategories && homeCategories.length) { %>
+  <div class="cat-grid">
+    <% homeCategories.forEach(category => { const categoryUrl = `/products/category/${category.slug}`; %>
+    <div class="cat-card" role="link" tabindex="0" data-category-url="<%= categoryUrl %>" onclick="window.location.href=this.dataset.categoryUrl" onkeydown="if (event.key === 'Enter' || event.key === ' ') window.location.href=this.dataset.categoryUrl">
+      <div class="cat-card-bg">
+        <% if (category.image) { %>
+          <img src="<%= responsiveImageUrl(category.image, 640) %>" srcset="<%= responsiveImageSrcset(category.image, [320, 640, 960]) %>" sizes="(max-width: 700px) 100vw, 33vw" width="665" height="500" alt="<%= category.name %>" class="cat-card-img" loading="lazy" />
+        <% } else { %>
+          <div class="cat-card-placeholder" aria-hidden="true"><%= category.icon || '📦' %></div>
+        <% } %>
+      </div>
+      <div class="cat-card-overlay"></div>
+      <div class="cat-card-content">
+        <div class="cat-title"><%= category.name %></div>
+        <a href="<%= categoryUrl %>" class="cat-link">Browse All <span>→</span></a>
+      </div>
+      <span class="cat-count"><%= categorySummary[category.slug] || 0 %> Products</span>
+    </div>
+    <% }) %>
+  </div>
+  <% } else { %>
+    <div class="category-empty-state">No product categories are currently available.</div>
+  <% } %>
+</section>

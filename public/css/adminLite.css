@@ -1,0 +1,24 @@
+/* Small compatibility layer for the intentionally simplified Lite admin markup. */
+a.btn-view,a.btn-sm{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+button.btn-sm{background:transparent}
+button:disabled{cursor:not-allowed;opacity:.55}
+.lite-error,.lite-message{margin:0 0 18px;padding:12px 14px;border:1px solid rgba(192,57,43,.28);background:#fff3f2;color:#8a2424;border-radius:4px;font-size:.8rem;line-height:1.5}
+.lite-warning{color:#8a5c00!important}
+.lite-empty{text-align:center!important;color:var(--text-lt)!important;padding:34px!important}
+.lite-muted{font-size:.72rem;color:var(--text-lt);margin-top:3px}
+.category-inline-form{display:flex;align-items:center;gap:8px;margin-top:10px;max-width:480px}
+.lite-input{min-width:0;flex:1;border:1px solid var(--sand);background:var(--admin-input,#fff);color:var(--text);font:inherit;font-size:.8rem;padding:9px 10px;border-radius:3px;outline:none}
+.lite-input:focus{border-color:var(--forest);box-shadow:0 0 0 2px color-mix(in srgb,var(--admin-accent) 8%,transparent)}
+.lite-existing-images{margin-bottom:14px}
+.lite-check{display:flex;align-items:center;gap:8px;margin-top:14px;color:var(--text-lt);font-size:.76rem;cursor:pointer}
+.lite-check input{accent-color:var(--forest)}
+.lite-order-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:20px}
+.lite-panel-pad{padding:24px}
+.lite-panel-heading{padding:17px 20px;border-bottom:1px solid var(--cream-dk);font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:600;color:var(--forest)}
+.lite-order-total{text-align:right;padding:18px 20px;font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--forest);border-top:1px solid var(--cream-dk)}
+.lite-back{align-self:center;text-decoration:none}
+.lite-status-form{align-items:stretch}
+.lite-status-form .btn-update:disabled{background:var(--sand)}
+.prod-thumb img{display:block}
+@media(max-width:900px){.lite-order-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.category-inline-form{flex-direction:column;align-items:stretch}.category-row-actions{justify-content:flex-start}.lite-status-form{flex-direction:column}.lite-back{align-self:flex-start}.stats-grid[style]{grid-template-columns:1fr!important}}

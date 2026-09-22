@@ -1,0 +1,69 @@
+<%- include('../partials/layout-start', {
+  title: `Shopping Cart — ${settings.store.name || 'Store'}`,
+  css: '/css/cart.css',
+  script: '/js/cart.js',
+  announcement: settings.content?.navigation?.announcementText || (settings.shipping.enabled && settings.shipping.freeShipping.enabled
+    ? '🚚 Free shipping on orders over ' + formatMoney(settings.shipping.freeShipping.threshold, settings) + ' — Shop with confidence'
+    : null),
+  active: 'cart',
+  cartCount: cartCount,
+  canonical: typeof canonical !== 'undefined' ? canonical : undefined
+}) %>
+<% const cartCopy = settings.content?.storefrontPages?.cart || {}; %>
+
+<div class="page-title-bar">
+  <div><div class="page-title-kicker"><%= cartCopy.eyebrow || 'YOUR CART' %></div><h1 class="page-title"><%= cartCopy.heading || 'Review your cart' %></h1><% if (cartCopy.description) { %><p class="page-title-description"><%= cartCopy.description %></p><% } %></div>
+</div>
+
+<div class="breadcrumb">
+  <a href="/">Home</a>
+  <span class="sep">›</span>
+  <span class="current">Cart</span>
+</div>
+
+<div class="trust-bar">
+  <div class="trust-item"><span class="trust-icon">🔒</span> <%= cartCopy.trustCheckoutLabel || 'Checkout Available' %></div>
+  <div class="trust-item"><span class="trust-icon">📦</span> <%= cartCopy.trustDispatchLabel || 'Dispatch after Confirmation' %></div>
+  <div class="trust-item"><span class="trust-icon">✈️</span> <%= cartCopy.trustDeliveryLabel || 'Delivery Options' %></div>
+  <div class="trust-item"><span class="trust-icon">💯</span> <%= cartCopy.trustQualityLabel || 'Quality Checked' %></div>
+</div>
+
+<div class="cart-container">
+  <div class="cart-items-section">
+    <div class="cart-header">
+      <h2 class="cart-title"><%= cartCopy.productsHeading || 'Your Products' %></h2>
+      <span class="cart-item-count">0 items</span>
+    </div>
+
+    <div class="cart-items">
+      <!-- Client-side rendering via cart.js from localStorage -->
+      <div class="loading-state" style="padding:36px 10px;text-align:center;">
+        <div class="empty-state-icon">⏳</div>
+        <h3><%= cartCopy.loadingHeading || 'Loading your cart...' %></h3>
+      </div>
+    </div>
+
+    <a class="continue-shopping-btn" href="/products">← <%= cartCopy.continueShoppingLabel || 'Continue Shopping' %></a>
+  </div>
+
+  <div class="cart-summary">
+    <h3 class="summary-title"><%= cartCopy.summaryHeading || 'Order Summary' %></h3>
+    <div class="summary-row">
+      <span><%= cartCopy.subtotalLabel || 'Subtotal' %></span>
+      <span class="subtotal-amount"><%= formatMoney(0, settings) %></span>
+    </div>
+    <div class="summary-row">
+      <span><%= cartCopy.shippingLabel || 'Shipping' %></span>
+      <span class="shipping-amount">Free</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-row summary-total">
+      <span><%= cartCopy.totalLabel || 'Total' %></span>
+      <span class="total-amount"><%= formatMoney(0, settings) %></span>
+    </div>
+    <a class="checkout-btn" href="/checkout"><%= cartCopy.checkoutButtonLabel || 'Continue to Checkout' %></a>
+    <p class="security-note">🔒 <%= cartCopy.helpText || 'Need help? Contact us' %></p>
+  </div>
+</div>
+
+<%- include('../partials/layout-end', { script: '/js/cart.js' }) %>

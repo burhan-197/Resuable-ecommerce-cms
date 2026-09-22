@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categories — <%= settings.store.name || 'Store' %> Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminShared.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminCategories.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminLite.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+<%- include('../partials/sidebar') %>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">Categories</div><div class="topbar-sub">Basic category management</div></div>
+  </div>
+
+  <div class="content category-page">
+    <% if (error) { %><div class="form-message lite-message"><%= error %></div><% } %>
+
+    <div class="category-layout">
+      <section class="category-panel category-list-panel">
+        <div class="panel-heading"><div><h2>Store Categories</h2><p><%= categories.length %> categor<%= categories.length === 1 ? 'y' : 'ies' %></p></div></div>
+        <% if (categories.length) { %>
+          <div class="category-list">
+            <% categories.forEach(category => { %>
+              <article class="category-row">
+                <div class="category-thumb"><span><%= category.icon || '📦' %></span></div>
+                <div class="category-row-main">
+                  <div class="category-row-title"><strong><%= category.name %></strong><span class="status-badge active">Active</span></div>
+                  <div class="category-row-meta"><span><%= category.productCount %> product<%= category.productCount === 1 ? '' : 's' %></span><span>•</span><span>/products/category/<%= category.slug %></span></div>
+                  <form class="category-inline-form" method="post" action="/admin/categories/<%= category._id %>">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input class="lite-input" name="name" value="<%= category.name %>" required maxlength="80" aria-label="Category name">
+                    <button class="btn-secondary" type="submit">Save</button>
+                  </form>
+                </div>
+                <div class="category-row-actions">
+                  <form method="post" action="/admin/categories/<%= category._id %>/delete" onsubmit="return confirm('Delete this category?')">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn-danger" type="submit" <%= category.productCount ? 'disabled' : '' %>>Delete</button>
+                    <% if (category.productCount) { %><div class="delete-warn">Move or delete products first</div><% } %>
+                  </form>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="empty-categories"><div>🗂️</div><h3>No categories yet</h3><p>Create a category before adding products.</p></div>
+        <% } %>
+      </section>
+
+      <aside class="category-panel category-form-panel">
+        <div class="panel-heading"><div><h2>Add Category</h2><p>Only the category name is required</p></div></div>
+        <form method="post" action="/admin/categories" id="categoryForm">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-field">
+            <label for="categoryName">Category Name <span class="required">*</span></label>
+            <input type="text" id="categoryName" name="name" maxlength="80" placeholder="e.g. Accessories" required>
+            <div class="field-hint">The URL slug is generated automatically.</div>
+          </div>
+          <div class="form-actions"><button class="btn-primary" type="submit">Add Category</button></div>
+        </form>
+      </aside>
+    </div>
+  </div>
+</div>
+</body>
+</html>

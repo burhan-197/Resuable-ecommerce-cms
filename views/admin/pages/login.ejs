@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Admin Login — <%= settings.store.name || 'Store' %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminLogin.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+  <div class="bg-pattern"></div>
+  <div class="bg-circles"><div class="bg-circle"></div><div class="bg-circle"></div><div class="bg-circle"></div></div>
+
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-logo-ring">⚙️</div>
+        <span class="login-brand-main"><%= settings.store.name || 'Store' %></span>
+        <span class="login-brand-sub">Admin Portal · Lite</span>
+      </div>
+
+      <div class="login-divider">
+        <div class="login-divider-line"></div>
+        <span class="login-divider-text">Secure Access</span>
+        <div class="login-divider-line"></div>
+      </div>
+
+      <% if (error) { %><div class="error-msg show"><%= error %></div><% } %>
+
+      <form method="post" action="/admin/login">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" id="username" name="username" autocomplete="username" required maxlength="60" placeholder="Enter your username" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" id="password" name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Enter your password" />
+        </div>
+        <button class="btn-login" type="submit">Sign In</button>
+      </form>
+
+      <div class="login-footer">StorefrontCMS Lite</div>
+    </div>
+  </div>
+</body>
+</html>

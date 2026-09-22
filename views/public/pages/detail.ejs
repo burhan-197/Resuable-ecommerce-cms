@@ -1,0 +1,216 @@
+<%- include('../partials/layout-start', {
+  title: `${product.name} — ${settings.store.name || 'Store'}`,
+  metaTitle: product.metaTitle || `${product.name} — ${settings.store.name || 'Store'}`,
+  metaDesc: product.metaDesc || product.desc || '',
+  metaTags: (product.tags || []).join(', '),
+  css: '/css/detail.css',
+  script: '/js/detail.js',
+  announcement: settings.content?.navigation?.announcementText || (settings.shipping.enabled && settings.shipping.freeShipping.enabled
+    ? '🚚 Free shipping on orders over ' + formatMoney(settings.shipping.freeShipping.threshold, settings) + ' — Shop with confidence'
+    : null),
+  active: 'products',
+  cartCount: cartCount,
+  canonical: typeof canonical !== 'undefined' ? canonical : undefined
+}) %>
+<% const detailCopy = settings.content?.storefrontPages?.productDetail || {}; %>
+
+<div class="breadcrumb">
+  <a href="/"><%= detailCopy.breadcrumbHomeLabel || 'Home' %></a>
+  <span class="sep">›</span>
+  <a href="/products"><%= detailCopy.breadcrumbShopLabel || 'Shop' %></a>
+  <span class="sep">›</span>
+  <a href="<%= typeof categoryPath !== 'undefined' ? categoryPath : `/products/category/${product.category}` %>"><%= product.categoryName || categoryLabel(product.category, storeCategories) %></a>
+  <span class="sep">›</span>
+  <span class="current"><%= product.name %></span>
+</div>
+
+<div id="detailProductData"
+     data-product="<%= encodeURIComponent(JSON.stringify({
+       id: product.id,
+       name: product.name,
+       category: product.category,
+       emoji: product.emoji,
+       slug: product.slug,
+       variants: product.variants,
+       image: product.images && product.images.length ? product.images[0] : ''
+     })) %>"
+     hidden></div>
+
+<% const initialVariantStock = Math.max(0, Number(product.variants?.[0]?.stock || 0)); %>
+<% const initialStockClass = initialVariantStock <= 0 ? 'is-out' : 'is-in-stock'; %>
+<% const initialStockText = initialVariantStock <= 0 ? 'Currently unavailable' : `${initialVariantStock} unit${initialVariantStock === 1 ? '' : 's'} available`; %>
+
+<div class="product-main">
+  <div class="gallery">
+    <div class="gallery-main-img">
+      <% const mainImage = product.images && product.images.length ? product.images[0] : null; %>
+      <% if (mainImage) { %>
+        <div class="gallery-main-media">
+          <img class="gallery-main-image" src="<%= responsiveImageUrl(mainImage, 960) %>" srcset="<%= responsiveImageSrcset(mainImage, [320, 640, 960, 1280]) %>" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="800" alt="<%= product.name %>" fetchpriority="high" />
+        </div>
+      <% } else { %>
+        <div class="img-placeholder">
+          <div><%= product.emoji %></div>
+          <div class="img-placeholder-label">Product</div>
+        </div>
+      <% } %>
+      <div class="gallery-zoom-hint">Hover to explore</div>
+    </div>
+    <div class="gallery-thumbs">
+      <% (product.images && product.images.length ? product.images : [product.emoji, product.emoji, product.emoji]).forEach((thumb, index) => { %>
+        <button class="gallery-thumb <%= index === 0 ? 'active' : '' %>" type="button" data-thumb-index="<%= index %>" data-thumb-src="<%= product.images && product.images.length ? responsiveImageUrl(thumb, 960) : '' %>" data-thumb-srcset="<%= product.images && product.images.length ? responsiveImageSrcset(thumb, [320, 640, 960, 1280]) : '' %>">
+          <% if (product.images && product.images.length) { %>
+            <img src="<%= responsiveImageUrl(thumb, 320) %>" width="80" height="80" alt="<%= product.name %> thumbnail <%= index + 1 %>" loading="lazy" />
+          <% } else { %>
+            <%= typeof thumb === 'string' ? thumb : '🖼️' %>
+          <% } %>
+        </button>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="product-info">
+    <div class="product-category-tag"><%= product.categoryName || categoryLabel(product.category, storeCategories) %></div>
+    <h1 class="product-title"><%= product.name %></h1>
+
+
+    <div class="product-price-row">
+      <div class="product-price" id="product-price"><%= formatMoney(product.variants[0].price, settings) %></div>
+      <div class="product-discount"><%= detailCopy.freshStockLabel || 'Fresh Stock' %></div>
+    </div>
+    <div class="stock-status <%= initialStockClass %>"
+         aria-live="polite"><%= initialStockText %></div>
+
+    <p class="product-short-desc"><%= product.desc %></p>
+
+    <div class="option-group">
+      <div class="option-label"><%= product.variantLabel || 'Size / Option' %> <span><%= product.variants[0].weight %></span></div>
+      <div class="weight-options">
+        <% product.variants.forEach((variant, index) => { %>
+          <button class="weight-btn <%= index === 0 ? 'active' : '' %>" type="button" aria-pressed="<%= index === 0 ? 'true' : 'false' %>" onclick="selectWeight(this)"><%= variant.weight %></button>
+        <% }) %>
+      </div>
+    </div>
+
+    <div class="option-group">
+      <div class="option-label"><%= detailCopy.quantityLabel || 'Quantity' %></div>
+      <div class="qty-row">
+        <div class="qty-control">
+          <button class="qty-btn" type="button" onclick="changeQty(-1)">−</button>
+          <div class="qty-val" id="qtyVal">1</div>
+          <button class="qty-btn" type="button" onclick="changeQty(1)">+</button>
+        </div>
+        <div class="qty-note"><%= detailCopy.quantityNote || 'Choose how many packs you want to add' %></div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn-add-cart" id="addCartBtn" type="button" onclick="addToCart()"><%= detailCopy.addToCartLabel || 'Add to Cart' %></button>
+      <button class="btn-buy-now" type="button" onclick="buyNow()"><%= detailCopy.buyNowLabel || 'Buy Now' %></button>
+    </div>
+
+    <div class="trust-pills">
+      <div class="trust-pill"><span>✓</span> <%= detailCopy.qualityCheckedLabel || 'Quality Checked' %></div>
+      <div class="trust-pill"><span>✓</span> <%= detailCopy.securePackagingLabel || 'Secure Packaging' %></div>
+    </div>
+  </div>
+</div>
+
+<div class="product-tabs-section">
+  <div class="tabs-nav">
+    <button class="tab-btn active" type="button" onclick="switchTab(this, 'descTab')"><%= detailCopy.descriptionTabLabel || 'Description' %></button>
+    <button class="tab-btn" type="button" onclick="switchTab(this, 'shippingTab')"><%= detailCopy.shippingTabLabel || 'Shipping' %></button>
+  </div>
+
+  <div class="tab-panel active" id="descTab">
+    <div class="desc-grid">
+      <div class="desc-text">
+        <h3><%= detailCopy.detailsHeading || 'Product Details' %></h3>
+        <p><%= product.details || product.desc %></p>
+        <ul class="desc-list">
+          <li><%= detailCopy.detailQualityBullet || 'Quality checked before dispatch.' %></li>
+          <li><%= product.categoryDescription || productCategoryMessage(product.category, storeCategories) %></li>
+          <li><%= detailCopy.detailPackagingBullet || 'Packed securely for delivery.' %></li>
+        </ul>
+      </div>
+      <div class="nutrition-box">
+        <div class="nutrition-title"><%= detailCopy.quickFactsHeading || 'Quick Facts' %></div>
+        <div class="nutrition-serving"><%= product.variantLabel || 'Size / Option' %>: <span id="packSizeValue"><%= String(product.variants[0].weight).replace(/\s*kg\b/i, ' kg') %></span></div>
+        <div class="nutrition-row"><span class="label"><%= detailCopy.categoryLabel || 'Category' %></span><span class="val"><%= product.categoryName || categoryLabel(product.category, storeCategories) %></span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="tab-panel" id="shippingTab">
+    <div class="shipping-grid">
+      <div class="shipping-card">
+        <div class="shipping-card-icon">🚚</div>
+        <div class="shipping-card-title"><%= detailCopy.dispatchTitle || 'Dispatch Information' %></div>
+        <div class="shipping-card-desc"><%= detailCopy.dispatchDescription || 'Orders are packed after confirmation.' %></div>
+      </div>
+      <div class="shipping-card">
+        <div class="shipping-card-icon">📦</div>
+        <div class="shipping-card-title"><%= detailCopy.packagingTitle || 'Protective Packaging' %></div>
+        <div class="shipping-card-desc"><%= detailCopy.packagingDescription || 'Packaging is selected to help protect products on the way to you.' %></div>
+      </div>
+      <div class="shipping-card">
+        <div class="shipping-card-icon">🌿</div>
+        <div class="shipping-card-title"><%= detailCopy.preparationTitle || 'Product Preparation' %></div>
+        <div class="shipping-card-desc"><%= detailCopy.preparationDescription || 'Preparation varies by product; see the product details for more information.' %></div>
+      </div>
+    </div>
+    <table class="shipping-table">
+      <thead><tr><th><%= detailCopy.shippingRegionLabel || 'Region' %></th><th><%= detailCopy.shippingTimeLabel || 'Delivery Time' %></th><th><%= detailCopy.shippingCostLabel || 'Shipping' %></th></tr></thead>
+      <tbody>
+        <% const shippingLabel = !settings.shipping.enabled
+          ? 'No shipping charge'
+          : settings.shipping.freeShipping.enabled
+            ? 'Free over ' + formatMoney(settings.shipping.freeShipping.threshold, settings)
+            : settings.shipping.flatRate.enabled
+              ? formatMoney(settings.shipping.flatRate.amount, settings) + ' flat rate'
+              : 'No shipping charge'; %>
+        <tr><td><%= detailCopy.standardDeliveryLabel || 'Standard Delivery' %></td><td><%= settings.shipping?.deliveryEstimate || 'Varies by destination' %></td><td><%= shippingLabel %></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="related-section">
+  <div class="section-label"><%= detailCopy.relatedEyebrow || 'You May Also Like' %></div>
+  <h2 class="section-title"><%= detailCopy.relatedHeadingBefore || 'Related' %> <em><%= detailCopy.relatedHeadingHighlight || 'Products' %></em></h2>
+  <div class="products-grid related-grid-wrap">
+    <% relatedProducts.forEach(productItem => { const relatedPrimary = productItem.variants?.[0] || {}; const relatedStock = Math.max(0, Number(relatedPrimary.stock || 0)); %>
+    <div class="product-card" role="link" tabindex="0" onclick="window.location.href='/products/<%= productItem.slug %>'" onkeydown="if (event.key === 'Enter' || event.key === ' ') window.location.href='/products/<%= productItem.slug %>'">
+      <div class="product-img-wrap">
+        <% if (productItem.images && productItem.images.length) { %>
+          <img src="<%= responsiveImageUrl(productItem.images[0], 640) %>" srcset="<%= responsiveImageSrcset(productItem.images[0], [320, 640, 960]) %>" sizes="(max-width: 700px) 50vw, 25vw" width="800" height="800" alt="<%= productItem.name %>" loading="lazy" />
+        <% } else { %>
+          <%= productItem.emoji %>
+        <% } %>
+      </div>
+      <div class="product-info">
+        <div class="product-category"><%= productItem.categoryName || categoryLabel(productItem.category, storeCategories) %></div>
+        <div class="product-name"><%= productItem.name %></div>
+        <div class="product-weight"><%= productItem.displayWeight %></div>
+        <div class="product-footer">
+          <div><span class="product-price"><%= formatMoney(productItem.price, settings) %></span></div>
+          <button class="add-to-cart" type="button" onclick="event.stopPropagation(); addRelated(this)"
+                  data-id="<%= productItem.id %>"
+                  data-name="<%= productItem.name %>"
+                  data-category="<%= productItem.category %>"
+                  data-category-name="<%= productItem.categoryName || categoryLabel(productItem.category, storeCategories) %>"
+                  data-emoji="<%= productItem.emoji %>"
+                  data-slug="<%= productItem.slug %>"
+                  data-price="<%= productItem.price %>"
+                  data-weight="<%= relatedPrimary.weight || productItem.displayWeight || 'Standard' %>"
+                  data-stock="<%= relatedStock %>"
+                  data-image="<%= productItem.images && productItem.images.length ? safeAssetUrl(productItem.images[0]) : '' %>"<% if (relatedStock <= 0) { %> disabled title="Currently unavailable" aria-label="<%= productItem.name %> is currently unavailable"<% } %>>+</button>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('../partials/layout-end', { script: '/js/detail.js' }) %>

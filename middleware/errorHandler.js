@@ -1,0 +1,3 @@
+function notFound(req,res){res.status(404).render('public/pages/not-found',{title:'Page not found',metaDesc:'The requested page could not be found.',cartCount:0,active:''});}
+function errorHandler(error,req,res,next){console.error(error);if(res.headersSent)return next(error);if(req.path.startsWith('/api/'))return res.status(error.statusCode||500).json({success:false,message:error.expose?error.message:'Something went wrong.'});res.status(error.statusCode||500).render('public/pages/server-error',{title:'Server error',metaDesc:'Something went wrong.',cartCount:0,active:'',errorId:''});}
+module.exports={notFound,errorHandler};

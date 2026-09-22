@@ -1,0 +1,23 @@
+<%- include('../partials/layout-start', {
+  title: 'Page not found',
+  metaDesc: 'The requested page could not be found.',
+  noCanonical: true,
+  robots: 'noindex, nofollow',
+  css: null,
+  announcement: null,
+  active: '',
+  cartCount: cartCount
+}) %>
+<% const errorCopy = settings.content?.storefrontPages?.errors || {}; %>
+
+<section style="max-width: 720px; margin: 0 auto; padding: 96px 24px 120px; text-align: center;">
+  <p style="color: var(--gold); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;"><%= errorCopy.notFoundEyebrow || 'PAGE NOT FOUND' %></p>
+  <h1 style="margin: 14px 0 12px; color: var(--forest); font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 7vw, 5rem);"><%= errorCopy.notFoundHeading || 'This page could not be found' %></h1>
+  <p style="margin: 0 auto 30px; max-width: 460px; color: var(--text-lt);"><%= errorCopy.notFoundDescription || 'The page you requested could not be found.' %></p>
+  <nav aria-label="Helpful links" style="display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;">
+    <a href="/" style="color: var(--forest);"><%= errorCopy.homeButtonLabel || 'Return Home' %></a>
+    <a href="/products" style="color: var(--forest);"><%= errorCopy.productsButtonLabel || 'Browse Products' %></a>
+  </nav>
+</section>
+
+<%- include('../partials/layout-end') %>

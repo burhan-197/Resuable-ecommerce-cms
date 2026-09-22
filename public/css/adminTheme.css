@@ -1,0 +1,460 @@
+/*
+ * adminTheme.css
+ * Neutral admin appearance presets. Storefront colors remain completely
+ * separate from these variables.
+ */
+body {
+  --admin-accent: #2563eb;
+  --admin-surface: #ffffff;
+  --admin-surface-2: #f8fafc;
+  --admin-input: #ffffff;
+  --admin-border: #e2e8f0;
+  --admin-sidebar: #111827;
+  --admin-sidebar-text: #e5e7eb;
+  --admin-muted: #64748b;
+}
+
+body.admin-theme-light {
+  --forest: var(--admin-accent);
+  --forest-dk: #111827;
+  --forest-lt: var(--admin-accent);
+  --gold: var(--admin-accent);
+  --gold-lt: var(--admin-accent);
+  --cream: #f3f4f6;
+  --cream-dk: #e5e7eb;
+  --sand: #cbd5e1;
+  --text: #111827;
+  --text-lt: #64748b;
+  --white: #ffffff;
+  --admin-surface: #ffffff;
+  --admin-surface-2: #f8fafc;
+  --admin-input: #ffffff;
+  --admin-border: #e2e8f0;
+  --admin-sidebar: #111827;
+  --admin-sidebar-text: #e5e7eb;
+  --admin-muted: #64748b;
+}
+
+body.admin-theme-slate {
+  --forest: var(--admin-accent);
+  --forest-dk: #243244;
+  --forest-lt: var(--admin-accent);
+  --gold: var(--admin-accent);
+  --gold-lt: var(--admin-accent);
+  --cream: #e9eef4;
+  --cream-dk: #d7e0ea;
+  --sand: #aab8c8;
+  --text: #172033;
+  --text-lt: #5c6b7d;
+  --white: #f8fafc;
+  --admin-surface: #f8fafc;
+  --admin-surface-2: #eef3f8;
+  --admin-input: #ffffff;
+  --admin-border: #cbd5e1;
+  --admin-sidebar: #243244;
+  --admin-sidebar-text: #e8eef5;
+  --admin-muted: #637386;
+}
+
+body.admin-theme-dark {
+  color-scheme: dark;
+  --forest: var(--admin-accent);
+  --forest-dk: #0b1220;
+  --forest-lt: var(--admin-accent);
+  --gold: var(--admin-accent);
+  --gold-lt: var(--admin-accent);
+  --cream: #0b1220;
+  --cream-dk: #263244;
+  --sand: #475569;
+  --text: #e5e7eb;
+  --text-lt: #94a3b8;
+  --white: #111827;
+  --admin-surface: #111827;
+  --admin-surface-2: #172033;
+  --admin-input: #0f172a;
+  --admin-border: #293548;
+  --admin-sidebar: #060b14;
+  --admin-sidebar-text: #e5e7eb;
+  --admin-muted: #94a3b8;
+}
+
+
+body.admin-theme-light,
+body.admin-theme-slate,
+body.admin-theme-dark {
+  --ink: var(--text);
+  --muted: var(--text-lt);
+  --line: var(--admin-border);
+  --paper: var(--admin-surface);
+  --wash: var(--admin-surface-2);
+  --brand: var(--admin-accent);
+  --brand2: var(--admin-accent);
+  --accent: var(--admin-accent);
+}
+body.admin-theme-light { background:#f3f4f6 !important; }
+body.admin-theme-slate { background:#e9eef4 !important; }
+body.admin-theme-dark { background:#0b1220 !important; }
+body .setup-header {
+  background: color-mix(in srgb, var(--admin-surface) 90%, transparent) !important;
+  border-bottom-color: var(--admin-border) !important;
+  color: var(--text) !important;
+}
+body .setup-signout button,
+body .setup-card,
+body .summary-card,
+body .feature-card,
+body .toggle-panel,
+body .sub-check.prominent {
+  background: var(--admin-surface) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--text) !important;
+}
+body .field > span,
+body .color-field > span { color: var(--text) !important; }
+body .setup-note { background:var(--admin-surface-2) !important; border-color:var(--admin-border) !important; color:var(--text-lt) !important; }
+body .field input,
+body .field textarea,
+body .field select,
+body .toggle-panel > input,
+body .field-grid.compact > input,
+body .color-field input[type="text"] {
+  background: var(--admin-input) !important;
+  color: var(--text) !important;
+  border-color: var(--admin-border) !important;
+}
+
+/* Neutralise the old fixed green/gold admin identity. */
+body .sidebar { background: var(--admin-sidebar) !important; border-right-color: var(--admin-border) !important; }
+body .sidebar-brand,
+body .sidebar-footer { border-color: color-mix(in srgb, var(--admin-border) 75%, transparent) !important; }
+body .sidebar-brand-main,
+body .admin-name { color: var(--admin-sidebar-text) !important; }
+body .sidebar-brand-sub,
+body .sidebar-badge,
+body .nav-item.active { color: var(--admin-accent) !important; }
+body .sidebar-badge {
+  background: color-mix(in srgb, var(--admin-accent) 13%, transparent) !important;
+  border-color: color-mix(in srgb, var(--admin-accent) 32%, transparent) !important;
+}
+body .nav-section-label,
+body .admin-role { color: color-mix(in srgb, var(--admin-sidebar-text) 42%, transparent) !important; }
+body .nav-item { color: color-mix(in srgb, var(--admin-sidebar-text) 64%, transparent) !important; }
+body .nav-item:hover {
+  background: color-mix(in srgb, var(--admin-accent) 10%, transparent) !important;
+  color: var(--admin-sidebar-text) !important;
+}
+body .nav-item.active {
+  background: color-mix(in srgb, var(--admin-accent) 14%, transparent) !important;
+}
+body .nav-item.active::before,
+body .nav-badge:not(.red) { background: var(--admin-accent) !important; }
+
+/* Dark preset: make cards, editors and fields genuinely dark even where old
+   page CSS used literal white values. */
+body.admin-theme-dark .topbar,
+body.admin-theme-dark .panel,
+body.admin-theme-dark .section,
+body.admin-theme-dark .stat-card,
+body.admin-theme-dark .account-card,
+body.admin-theme-dark .security-stat,
+body.admin-theme-dark .category-panel,
+body.admin-theme-dark .coupon-panel,
+body.admin-theme-dark .filter-bar,
+body.admin-theme-dark .settings-section,
+body.admin-theme-dark .content-editor-intro,
+body.admin-theme-dark .homepage-card,
+body.admin-theme-dark .custom-section-card,
+body.admin-theme-dark .message-panel,
+body.admin-theme-dark .message-detail,
+body.admin-theme-dark .setup-card,
+body.admin-theme-dark .summary-card,
+body.admin-theme-dark .feature-card,
+body.admin-theme-dark .toggle-panel,
+body.admin-theme-dark .sub-check.prominent {
+  background: var(--admin-surface) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--text) !important;
+}
+
+body.admin-theme-dark input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+body.admin-theme-dark textarea,
+body.admin-theme-dark select,
+body.admin-theme-dark [contenteditable="true"],
+body.admin-theme-dark .editor-content,
+body.admin-theme-dark .sfield-input,
+body.admin-theme-dark .form-field input,
+body.admin-theme-dark .form-field select,
+body.admin-theme-dark .form-field textarea {
+  background: var(--admin-input) !important;
+  color: var(--text) !important;
+  border-color: var(--admin-border) !important;
+}
+
+body.admin-theme-dark input::placeholder,
+body.admin-theme-dark textarea::placeholder { color: #718096 !important; }
+
+body.admin-theme-dark table,
+body.admin-theme-dark th,
+body.admin-theme-dark td,
+body.admin-theme-dark .panel-head,
+body.admin-theme-dark .settings-section-head,
+body.admin-theme-dark .coupon-row,
+body.admin-theme-dark .category-row,
+body.admin-theme-dark .product-row,
+body.admin-theme-dark .checkout-row {
+  border-color: var(--admin-border) !important;
+}
+
+body.admin-theme-dark .btn-secondary,
+body.admin-theme-dark .btn-ghost,
+body.admin-theme-dark .btn.ghost,
+body.admin-theme-dark .icon-btn {
+  background: var(--admin-surface-2) !important;
+  color: var(--text) !important;
+  border-color: var(--admin-border) !important;
+}
+
+/* Theme chooser UI used by setup and normal Settings. */
+.admin-theme-chooser {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.admin-theme-option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.admin-theme-option > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.admin-theme-card {
+  height: 124px;
+  border: 2px solid var(--admin-border, var(--cream-dk));
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--admin-surface, var(--white));
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.admin-theme-option:hover .admin-theme-card { transform: translateY(-1px); }
+.admin-theme-option > input:checked + .admin-theme-card {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-accent) 18%, transparent);
+}
+.admin-theme-preview {
+  height: 82px;
+  display: grid;
+  grid-template-columns: 34% 1fr;
+}
+.admin-theme-preview .preview-side { padding: 9px; }
+.admin-theme-preview .preview-main { padding: 10px; display: grid; gap: 7px; }
+.admin-theme-preview .preview-line { height: 7px; border-radius: 999px; opacity: .72; }
+.admin-theme-preview .preview-button { height: 18px; width: 48%; border-radius: 5px; }
+.admin-theme-preview-light { background:#f3f4f6; }
+.admin-theme-preview-light .preview-side { background:#111827; }
+.admin-theme-preview-light .preview-line { background:#94a3b8; }
+.admin-theme-preview-light .preview-button { background:#2563eb; }
+.admin-theme-preview-dark { background:#0b1220; }
+.admin-theme-preview-dark .preview-side { background:#060b14; }
+.admin-theme-preview-dark .preview-line { background:#475569; }
+.admin-theme-preview-dark .preview-button { background:#60a5fa; }
+.admin-theme-preview-slate { background:#e9eef4; }
+.admin-theme-preview-slate .preview-side { background:#243244; }
+.admin-theme-preview-slate .preview-line { background:#94a3b8; }
+.admin-theme-preview-slate .preview-button { background:#64748b; }
+.admin-theme-label {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  padding: 9px 10px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.admin-theme-label small {
+  font-size:.65rem;
+  color:var(--text-lt);
+  font-weight:400;
+}
+.admin-accent-field {
+  margin-top: 14px;
+  max-width: 360px;
+}
+.admin-accent-control {
+  display:grid;
+  grid-template-columns:48px 1fr;
+  gap:10px;
+  align-items:center;
+}
+.admin-accent-control input[type="color"] {
+  width:48px;
+  height:42px;
+  padding:2px;
+  border:1px solid var(--admin-border, var(--cream-dk));
+  border-radius:9px;
+  background:var(--admin-surface, var(--white));
+}
+@media(max-width:720px) {
+  .admin-theme-chooser { grid-template-columns:1fr; }
+  .admin-theme-card { height:112px; }
+  .admin-theme-preview { height:72px; }
+}
+
+/* --------------------------------------------------------------------------
+   Complete admin theme coverage
+   Login, password recovery and first-time setup use the same saved admin
+   appearance as the main dashboard. These rules intentionally live here so
+   page-specific CSS cannot re-introduce a store-specific visual identity.
+   -------------------------------------------------------------------------- */
+body.admin-theme-light,
+body.admin-theme-slate,
+body.admin-theme-dark {
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+}
+
+/* Login / forgot-password / reset-password */
+body .bg-pattern {
+  background-image:
+    radial-gradient(circle at 15% 50%, color-mix(in srgb, var(--admin-accent) 12%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--admin-accent) 8%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 60% 85%, color-mix(in srgb, var(--admin-sidebar) 34%, transparent) 0%, transparent 40%) !important;
+}
+body .bg-circle { border-color: color-mix(in srgb, var(--admin-accent) 10%, transparent) !important; }
+body .bg-circle:nth-child(2),
+body .bg-circle:nth-child(3) { border-color: color-mix(in srgb, var(--admin-accent) 7%, transparent) !important; }
+body .login-card {
+  background: color-mix(in srgb, var(--admin-surface) 94%, transparent) !important;
+  border-color: var(--admin-border) !important;
+  box-shadow: 0 22px 65px color-mix(in srgb, #000 14%, transparent);
+  color: var(--text) !important;
+}
+body .login-logo-ring {
+  border-color: color-mix(in srgb, var(--admin-accent) 36%, transparent) !important;
+  color: var(--admin-accent) !important;
+}
+body .login-brand-main { color: var(--text) !important; }
+body .login-brand-sub,
+body .forgot-row a,
+body .login-footer a:hover,
+body .password-toggle:hover { color: var(--admin-accent) !important; }
+body .login-divider-line { background: var(--admin-border) !important; }
+body .login-divider-text,
+body .form-label,
+body .login-footer,
+body .url-note,
+body .login-help,
+body .footer-separator { color: var(--text-lt) !important; }
+body .form-input {
+  background: var(--admin-input) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--text) !important;
+}
+body .form-input::placeholder { color: color-mix(in srgb, var(--text-lt) 62%, transparent) !important; }
+body .form-input:focus {
+  border-color: var(--admin-accent) !important;
+  background: var(--admin-input) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-accent) 14%, transparent);
+}
+body .password-toggle { color: var(--text-lt) !important; }
+body .btn-login {
+  background: var(--admin-accent) !important;
+  color: #fff !important;
+  clip-path: none !important;
+  border-radius: 9px !important;
+}
+body .btn-login:hover {
+  background: color-mix(in srgb, var(--admin-accent) 86%, #000) !important;
+}
+body.admin-theme-dark .login-card {
+  background: color-mix(in srgb, var(--admin-surface) 90%, transparent) !important;
+}
+
+/* First-time setup */
+body .setup-brand-mark,
+body .setup-progress-item.done .setup-progress-dot,
+body .feature-card input:checked ~ .feature-switch,
+body .btn.primary {
+  background: var(--admin-accent) !important;
+}
+body .setup-progress-item.done .setup-progress-dot,
+body .setup-progress-item.active .setup-progress-dot {
+  border-color: var(--admin-accent) !important;
+}
+body .setup-progress-item.done,
+body .setup-progress-item.active,
+body .setup-kicker,
+body .setup-heading h1,
+body .summary-card strong {
+  color: var(--admin-accent) !important;
+}
+body .setup-progress-item.done::before,
+body .setup-progress-item.active::before { background: var(--admin-accent) !important; }
+body .setup-progress-item::before { background: var(--admin-border) !important; }
+body .setup-progress-dot {
+  background: var(--admin-surface-2) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--text-lt) !important;
+}
+body .setup-progress-item.active .setup-progress-dot {
+  background: var(--admin-surface) !important;
+  color: var(--admin-accent) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--admin-accent) 11%, transparent) !important;
+}
+body .btn.primary:hover {
+  background: color-mix(in srgb, var(--admin-accent) 86%, #000) !important;
+}
+body .btn.ghost {
+  background: var(--admin-surface) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--text) !important;
+}
+body .btn.ghost:hover { background: var(--admin-surface-2) !important; }
+body .setup-heading p,
+body .setup-signout,
+body .setup-progress-item,
+body .field small,
+body .current-logo,
+body .feature-card small,
+body .checkout-row small,
+body .summary-card > span,
+body .summary-card small,
+body .setup-footer { color: var(--text-lt) !important; }
+body .feature-icon,
+body .checkout-row.header { background: var(--admin-surface-2) !important; }
+body .feature-card:has(input:checked) {
+  border-color: color-mix(in srgb, var(--admin-accent) 38%, var(--admin-border)) !important;
+  background: color-mix(in srgb, var(--admin-accent) 5%, var(--admin-surface)) !important;
+}
+body .toggle-head input,
+body .sub-check input,
+body .mini-toggle input { accent-color: var(--admin-accent) !important; }
+body .color-field,
+body .checkout-table,
+body .checkout-row,
+body .setup-actions { border-color: var(--admin-border) !important; }
+body .color-field input[type="color"] {
+  background: var(--admin-input) !important;
+  border-color: var(--admin-border) !important;
+}
+
+/* Common page elements that previously retained literal brand-tinted states. */
+body .field-input:focus,
+body .field-textarea:focus,
+body .form-field input:focus,
+body .form-field textarea:focus,
+body .form-field select:focus,
+body .sfield-input:focus,
+body .editor-textarea:focus {
+  border-color: var(--admin-accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-accent) 11%, transparent) !important;
+}
+body .section-badge,
+body .message-status.unread {
+  background: color-mix(in srgb, var(--admin-accent) 12%, transparent) !important;
+  color: var(--admin-accent) !important;
+}

@@ -1,0 +1,182 @@
+
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--cream-dk);
+      padding: 0 36px; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+      box-shadow: 0 2px 12px color-mix(in srgb, var(--admin-accent) 5%, transparent);
+    }
+    .topbar-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 600; color: var(--forest);
+    }
+    .topbar-sub { font-size: .75rem; color: var(--text-lt); margin-top: 1px; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-date { font-size: .78rem; color: var(--text-lt); }
+    .topbar-store-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--forest); color: var(--cream);
+      text-decoration: none; font-size: .75rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: 9px 18px; border-radius: 2px; font-weight: 500;
+      transition: background .2s;
+    }
+    .topbar-store-btn:hover { background: var(--forest-lt); }
+ 
+    .content { padding: 36px; flex: 1; }
+ 
+    /* Stats */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 18px; margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--cream-dk);
+      border-radius: 4px; padding: 24px 22px;
+      position: relative; overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--admin-accent) 8%, transparent); }
+    .stat-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+    }
+    .stat-card.green::after { background: var(--forest); }
+    .stat-card.gold::after  { background: var(--gold); }
+    .stat-card.red::after   { background: var(--danger); }
+    .stat-card.sand::after  { background: var(--sand); }
+    .stat-icon { font-size: 1.4rem; margin-bottom: 14px; }
+    .stat-label {
+      font-size: .7rem; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--text-lt);
+      font-weight: 500; margin-bottom: 8px;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 600;
+      color: var(--forest); line-height: 1; margin-bottom: 8px;
+    }
+    .stat-change { font-size: .75rem; color: var(--text-lt); }
+    .stat-change .up { color: var(--success); font-weight: 600; }
+    .stat-change .dn { color: var(--danger);  font-weight: 600; }
+ 
+    /* Layout */
+    .two-col  { display: grid; grid-template-columns: 1fr 360px; gap: 20px; margin-bottom: 20px; }
+ 
+    /* Panel */
+    .panel { background: var(--white); border: 1px solid var(--cream-dk); border-radius: 4px; overflow: hidden; }
+    .panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; border-bottom: 1px solid var(--cream-dk);
+    }
+    .panel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 600; color: var(--forest);
+    }
+    .panel-link {
+      font-size: .72rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--gold);
+      text-decoration: none; font-weight: 500; transition: color .2s;
+    }
+    .panel-link:hover { color: var(--forest); }
+ 
+    /* Orders table */
+    .orders-table { width: 100%; border-collapse: collapse; }
+    .orders-table th {
+      text-align: left; padding: 12px 20px;
+      font-size: .68rem; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--text-lt);
+      font-weight: 500; border-bottom: 1px solid var(--cream-dk);
+      background: rgba(245,239,230,.5);
+    }
+    .orders-table td {
+      padding: 14px 20px; font-size: .84rem;
+      color: var(--text); border-bottom: 1px solid rgba(237,228,214,.6);
+      vertical-align: middle;
+    }
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tr:hover td { background: rgba(245,239,230,.5); }
+    .order-id { font-family: monospace; font-size: .78rem; color: var(--text-lt); }
+    .order-customer { font-weight: 500; }
+    .order-amount  { font-weight: 600; color: var(--forest); }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .68rem; letter-spacing: .1em;
+      text-transform: uppercase; padding: 4px 10px;
+      border-radius: 20px; font-weight: 600;
+    }
+    .status-pill::before { content: '●'; font-size: .55rem; }
+    .status-pill.pending    { background: #fef3e2; color: #8a5c00; }
+    .status-pill.processing { background: #e8f4fd; color: #1a5a8a; }
+    .status-pill.shipped    { background: #e8f5ee; color: #1a5a38; }
+    .status-pill.delivered  { background: #e8f5ee; color: var(--success); }
+    .status-pill.cancelled  { background: #fde8e8; color: #8a1a1a; }
+    .btn-view {
+      background: none; border: 1px solid var(--cream-dk);
+      padding: 5px 12px; font-family: 'Jost', sans-serif;
+      font-size: .72rem; color: var(--text-lt); cursor: pointer;
+      border-radius: 2px; transition: border-color .2s, color .2s;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .btn-view:hover { border-color: var(--gold); color: var(--forest); }
+ 
+    /* Low stock */
+    .stock-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 22px; border-bottom: 1px solid rgba(237,228,214,.6);
+    }
+    .stock-item:last-child { border-bottom: none; }
+    .stock-name { font-size: .84rem; font-weight: 500; color: var(--text); }
+    .stock-cat  { font-size: .72rem; color: var(--text-lt); margin-top: 2px; }
+    .stock-qty  { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; }
+    .stock-qty.critical { color: var(--danger); }
+    .stock-qty.low      { color: var(--warning); }
+ 
+    /* Quick actions */
+    .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 18px; }
+    .quick-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(245,239,230,.7);
+      border: 1px solid var(--cream-dk);
+      padding: 14px 16px; border-radius: 3px;
+      text-decoration: none; color: var(--text);
+      font-size: .8rem; font-weight: 500;
+      transition: background .2s, border-color .2s; cursor: pointer;
+    }
+    .quick-btn:hover { background: var(--cream-dk); border-color: var(--sand); }
+    .quick-btn-icon { font-size: 1.1rem; }
+ 
+    /* Revenue summary */
+    .rev-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 22px; border-bottom: 1px solid rgba(237,228,214,.6);
+    }
+    .rev-row:last-child { border-bottom: none; }
+    .rev-label { font-size: .8rem; color: var(--text-lt); }
+    .rev-val {
+      font-weight: 600; color: var(--forest);
+      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+    }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .bar-label { font-size: .75rem; color: var(--text-lt); width: 80px; }
+    .bar-track { flex: 1; height: 6px; background: var(--cream-dk); border-radius: 3px; overflow: hidden; }
+    .bar-fill  { height: 100%; border-radius: 3px; }
+    .bar-count { font-size: .75rem; font-weight: 600; color: var(--text); }
+ 
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col    { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .main    { margin-left: 0; }
+      .content { padding: 20px; }
+      .topbar  { padding: 12px 16px; height: auto; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+      .orders-table { display: block; overflow-x: auto; white-space: nowrap; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .quick-grid { grid-template-columns: 1fr; }
+    }

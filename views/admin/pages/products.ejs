@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products — <%= settings.store.name || 'Store' %> Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminProducts.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminShared.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminLite.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+<%- include('../partials/sidebar') %>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">Products</div><div class="topbar-sub">Manage your basic product catalogue</div></div>
+    <div class="topbar-right"><a href="/admin/products/new" class="btn-primary">＋ Add Product</a></div>
+  </div>
+
+  <div class="content">
+    <div class="filter-bar">
+      <div class="search-wrap"><input type="search" id="productSearch" placeholder="Search products…" autocomplete="off"></div>
+      <span class="filter-count" id="productCount"><%= products.length %> product<%= products.length === 1 ? '' : 's' %></span>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div class="panel-title">All Products</div></div>
+      <table class="products-table" id="productsTable">
+        <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% products.forEach(product => { const image = product.images?.[0] || ''; %>
+            <tr data-search="<%= `${product.name} ${product.categoryName}`.toLowerCase() %>">
+              <td>
+                <div class="prod-info">
+                  <div class="prod-thumb"><% if (image) { %><img src="<%= image %>" alt="" style="width:100%;height:100%;object-fit:cover"><% } else { %><span>📦</span><% } %></div>
+                  <div><div class="prod-name"><%= product.name %></div><div class="prod-sku"><%= product.id %></div></div>
+                </div>
+              </td>
+              <td><span class="cat-pill"><%= product.categoryName || product.category %></span></td>
+              <td><span class="price-main"><%= formatMoney(product.price, settings) %></span></td>
+              <td><%= product.stock %></td>
+              <td><span class="status-pill <%= product.stock > 0 ? 'active' : 'inactive' %>"><%= product.stock > 0 ? 'In Stock' : 'Out of Stock' %></span></td>
+              <td>
+                <div class="action-btns">
+                  <a class="btn-sm edit" href="/admin/products/<%= product._id %>/edit">Edit</a>
+                  <form action="/admin/products/<%= product._id %>/delete" method="post" onsubmit="return confirm('Delete this product?')">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn-sm del" type="submit">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+          <% if (!products.length) { %><tr><td colspan="6" class="lite-empty">No products yet. Add your first product to get started.</td></tr><% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const input = document.getElementById('productSearch');
+  const rows = [...document.querySelectorAll('#productsTable tbody tr[data-search]')];
+  const count = document.getElementById('productCount');
+  if (!input) return;
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let visible = 0;
+    rows.forEach(row => { const show = !q || row.dataset.search.includes(q); row.hidden = !show; if (show) visible++; });
+    count.textContent = `${visible} product${visible === 1 ? '' : 's'}`;
+  });
+})();
+</script>
+</body>
+</html>

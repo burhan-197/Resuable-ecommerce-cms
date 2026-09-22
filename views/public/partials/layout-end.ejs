@@ -1,0 +1,14 @@
+  </main>
+  <%- include('footer') %>
+  
+  <script src="/js/responsiveImages.js?v=<%= assetVersion %>" defer></script>
+  <script src="/js/currency.js?v=<%= assetVersion %>" defer></script>
+  <script src="/js/cartManager.js?v=<%= assetVersion %>" defer></script>
+  <script src="/js/nav.js?v=<%= assetVersion %>" defer></script>
+  <% if (locals.scripts && Array.isArray(locals.scripts)) { %>
+    <% locals.scripts.forEach(src => { const versionedSrc = src + (src.includes('?') ? '&v=' : '?v=') + assetVersion; %><script src="<%= versionedSrc %>" defer></script><% }) %>
+  <% } else if (locals.script) { %>
+    <script src="<%= locals.script + (locals.script.includes('?') ? '&v=' : '?v=') + assetVersion %>" defer></script>
+  <% } %>
+</body>
+</html>

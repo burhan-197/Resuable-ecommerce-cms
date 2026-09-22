@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Admin Setup — <%= settings.store.name || 'Store' %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminSetup.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+  <div class="setup-shell">
+    <header class="setup-header">
+      <div class="setup-brand">
+        <div class="setup-brand-mark">⚙</div>
+        <div>
+          <div class="setup-brand-name"><%= settings.store.name || 'Your Store' %></div>
+          <div class="setup-brand-sub">Lite Edition Setup</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="setup-main" style="max-width:760px">
+      <section class="setup-card">
+        <div class="setup-heading">
+          <span class="setup-kicker">First-time setup</span>
+          <h1>Create your administrator</h1>
+          <p>Create the single admin account used to manage products, categories and orders.</p>
+        </div>
+
+        <% if (error) { %><div class="setup-alert error"><%= error %></div><% } %>
+
+        <form method="post" action="/admin/setup" class="setup-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <label class="field">
+            <span>Username</span>
+            <input name="username" minlength="3" maxlength="60" autocomplete="username" required placeholder="Choose an admin username" />
+          </label>
+          <div class="field-grid two">
+            <label class="field">
+              <span>Password</span>
+              <input name="password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required />
+            </label>
+            <label class="field">
+              <span>Confirm Password</span>
+              <input name="confirmPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required />
+            </label>
+          </div>
+          <div class="setup-note">This Lite Edition supports one administrator account. Use a strong password and keep it private.</div>
+          <div class="setup-actions"><span></span><button class="btn primary" type="submit">Create Admin →</button></div>
+        </form>
+      </section>
+      <footer class="setup-footer">StorefrontCMS Lite</footer>
+    </main>
+  </div>
+</body>
+</html>

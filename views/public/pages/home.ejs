@@ -1,0 +1,20 @@
+<%- include('../partials/layout-start', {
+  title: settings.seo.metaTitle || settings.store.name || 'Store',
+  css: '/css/home.css',
+  script: '/js/home.js',
+  announcement: null,
+  active: 'home',
+  cartCount: cartCount,
+  canonical: typeof canonical !== 'undefined' ? canonical : undefined
+}) %>
+
+<% homepageSections.forEach(section => { %>
+  <% if (section.key === 'hero') { %><%- include('../partials/home/hero') %><% } %>
+  <% if (section.key === 'trustBar') { %><%- include('../partials/home/trustBar') %><% } %>
+  <% if (section.key === 'categories') { %><%- include('../partials/home/categories') %><% } %>
+  <% if (section.key === 'featuredProducts') { %><%- include('../partials/home/featuredProducts') %><% } %>
+  <% if (section.key === 'process') { %><%- include('../partials/home/process') %><% } %>
+  <% if (section.key === 'promo') { %><%- include('../partials/home/promo') %><% } %>
+<% }) %>
+
+<%- include('../partials/layout-end', { script: '/js/home.js' }) %>

@@ -1,0 +1,40 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span class="sidebar-brand-main"><%= settings.store.name || 'Store' %></span>
+    <span class="sidebar-brand-sub">Admin Panel</span>
+    <span class="sidebar-badge">Lite Edition</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Store</div>
+    <a class="nav-item <%= path === '/admin/dashboard' ? 'active' : '' %>" href="/admin/dashboard">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+    <a class="nav-item <%= path.startsWith('/admin/products') ? 'active' : '' %>" href="/admin/products">
+      <span class="nav-icon">🛍️</span> Products
+    </a>
+    <a class="nav-item <%= path.startsWith('/admin/categories') ? 'active' : '' %>" href="/admin/categories">
+      <span class="nav-icon">🗂️</span> Categories
+    </a>
+    <a class="nav-item <%= path.startsWith('/admin/orders') ? 'active' : '' %>" href="/admin/orders">
+      <span class="nav-icon">📦</span> Orders
+    </a>
+    <a class="nav-item" href="/" target="_blank" rel="noopener">
+      <span class="nav-icon">🏪</span> View Store
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-admin-info">
+      <div class="admin-avatar">👤</div>
+      <div>
+        <div class="admin-name"><%= locals.admin?.username || 'Admin' %></div>
+        <div class="admin-role">Administrator</div>
+      </div>
+    </div>
+    <form method="post" action="/admin/logout" style="margin:0">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button type="submit" class="btn-logout">🚪 Sign Out</button>
+    </form>
+  </div>
+</aside>

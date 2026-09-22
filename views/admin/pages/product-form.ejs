@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= product && product._id ? 'Edit' : 'Add' %> Product — <%= settings.store.name || 'Store' %> Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminAddProduct.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminShared.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminLite.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+<%- include('../partials/sidebar') %>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title"><%= product && product._id ? 'Edit Product' : 'Add Product' %></div><div class="topbar-sub">Lite Edition — essential product information only</div></div>
+    <div class="topbar-right"><a href="/admin/products" class="btn-ghost">← Products</a></div>
+  </div>
+
+  <div class="content">
+    <% if (error) { %><div class="lite-error"><%= error %></div><% } %>
+    <form method="post" enctype="multipart/form-data" action="<%= product && product._id ? '/admin/products/' + product._id : '/admin/products' %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="form-grid">
+        <div>
+          <section class="section">
+            <div class="section-head"><div class="section-title">Product Information</div><span class="section-badge">Required</span></div>
+            <div class="section-body">
+              <div class="field">
+                <label class="field-label" for="name">Product Name <span class="req">*</span></label>
+                <input class="field-input" id="name" name="name" required maxlength="120" value="<%= product?.name || '' %>" placeholder="Enter product name">
+              </div>
+              <div class="field">
+                <label class="field-label" for="description">Description <span class="req">*</span></label>
+                <textarea class="field-textarea" id="description" name="description" rows="7" required maxlength="5000" placeholder="Describe the product"><%= product?.desc || product?.description || '' %></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><div class="section-title">Product Images</div><span class="section-badge">Up to 4</span></div>
+            <div class="section-body">
+              <% if (product?.images?.length) { %>
+                <div class="img-preview-grid lite-existing-images">
+                  <% product.images.forEach((img, index) => { %><div class="img-preview-item"><img src="<%= img %>" alt="Current product image <%= index + 1 %>"><% if (index === 0) { %><span class="img-primary-badge">Primary</span><% } %></div><% }) %>
+                </div>
+              <% } %>
+              <label class="img-upload-zone" for="images">
+                <input id="images" name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+                <div class="img-upload-icon">🖼️</div>
+                <div class="img-upload-text"><strong>Click to upload</strong> product images</div>
+                <div class="img-upload-hint">JPG, PNG or WebP · max 5 MB each · up to 4 images</div>
+              </label>
+              <% if (product?.images?.length) { %>
+                <label class="lite-check"><input type="checkbox" name="removeImages" value="1"> Remove current images if no replacements are uploaded</label>
+              <% } %>
+            </div>
+          </section>
+        </div>
+
+        <div>
+          <section class="section">
+            <div class="section-head"><div class="section-title">Price & Stock</div></div>
+            <div class="section-body">
+              <div class="field">
+                <label class="field-label" for="price">Price (<%= settings.currency.code %>) <span class="req">*</span></label>
+                <input class="field-input" id="price" name="price" type="number" min="0.01" step="0.01" required value="<%= product?.variants?.[0]?.price ?? product?.price ?? '' %>" placeholder="0.00">
+              </div>
+              <div class="field">
+                <label class="field-label" for="stock">Stock Quantity <span class="req">*</span></label>
+                <input class="field-input" id="stock" name="stock" type="number" min="0" step="1" required value="<%= product?.variants?.[0]?.stock ?? product?.stock ?? 0 %>">
+                <div class="field-hint">Whole units only.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><div class="section-title">Category</div><a class="section-badge" href="/admin/categories" style="text-decoration:none">Manage</a></div>
+            <div class="section-body">
+              <div class="category-picker">
+                <label class="field-label" for="category">Choose Category <span class="req">*</span></label>
+                <select class="field-select category-select" id="category" name="category" required>
+                  <option value="">Select a category…</option>
+                  <% categories.forEach(category => { %><option value="<%= category.slug %>" <%= (product?.category || '') === category.slug ? 'selected' : '' %>><%= category.icon || '📦' %> <%= category.name %></option><% }) %>
+                </select>
+                <% if (!categories.length) { %><div class="field-hint lite-warning">Create a category before saving a product.</div><% } %>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a class="btn-ghost" href="/admin/products">Cancel</a>
+        <button class="btn-primary" type="submit" <%= categories.length ? '' : 'disabled' %>><%= product && product._id ? 'Save Changes' : 'Save Product' %></button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

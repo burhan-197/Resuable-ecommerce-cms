@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders — <%= settings.store.name || 'Store' %> Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/adminOrders.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminShared.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminTheme.css?v=<%= assetVersion %>" />
+  <link rel="stylesheet" href="/css/adminLite.css?v=<%= assetVersion %>" />
+</head>
+<body class="admin-theme-light" style="--admin-accent:<%= settings?.adminAppearance?.accent || '#1b3e28' %>">
+<%- include('../partials/sidebar') %>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">Orders</div><div class="topbar-sub">View orders and update their status</div></div>
+  </div>
+
+  <div class="content">
+    <div class="filter-bar">
+      <div class="search-wrap"><input type="search" id="orderSearch" placeholder="Search order ID, customer or city…" autocomplete="off"></div>
+      <select class="filter-select" id="orderStatus"><option value="">All statuses</option><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select>
+      <span class="filter-count" id="orderCount"><%= orders.length %> order<%= orders.length === 1 ? '' : 's' %></span>
+    </div>
+
+    <div class="panel">
+      <table class="orders-table" id="ordersTable">
+        <thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <% orders.forEach(order => { %>
+            <tr data-search="<%= `${order.id} ${order.customer} ${order.city}`.toLowerCase() %>" data-status="<%= order.status %>">
+              <td class="order-id">#<%= order.id %></td>
+              <td><%= order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '—' %></td>
+              <td><div class="order-customer"><%= order.customer %></div><div class="lite-muted"><%= order.city %></div></td>
+              <td class="order-amount"><%= formatMoney(order.total, settings) %></td>
+              <td><%= order.paymentMethod === 'cod' ? 'COD' : 'Manual' %></td>
+              <td><span class="status-pill <%= order.status %>"><%= order.status %></span></td>
+              <td><a class="btn-view" href="/admin/orders/<%= order._id %>">Details</a></td>
+            </tr>
+          <% }) %>
+          <% if (!orders.length) { %><tr><td colspan="7" class="lite-empty">No orders yet.</td></tr><% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const search = document.getElementById('orderSearch');
+  const status = document.getElementById('orderStatus');
+  const rows = [...document.querySelectorAll('#ordersTable tbody tr[data-search]')];
+  const count = document.getElementById('orderCount');
+  function apply() {
+    const q = search.value.trim().toLowerCase(); const s = status.value; let visible = 0;
+    rows.forEach(row => { const show = (!q || row.dataset.search.includes(q)) && (!s || row.dataset.status === s); row.hidden = !show; if (show) visible++; });
+    count.textContent = `${visible} order${visible === 1 ? '' : 's'}`;
+  }
+  search?.addEventListener('input', apply); status?.addEventListener('change', apply);
+})();
+</script>
+</body>
+</html>

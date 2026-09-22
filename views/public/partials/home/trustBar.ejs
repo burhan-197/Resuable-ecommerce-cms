@@ -1,0 +1,8 @@
+<% const trustItems = (homepage.trustBar.items || []).filter(item => item && item.text); %>
+<% if (trustItems.length) { %>
+<div class="trust-bar">
+  <% trustItems.forEach(item => { %>
+    <div class="trust-item"><% if (item.icon) { %><span class="trust-icon"><%= item.icon %></span><% } %><%= item.text %></div>
+  <% }) %>
+</div>
+<% } %>

@@ -1,0 +1,452 @@
+/* ── SUCCESS PAGE ── */
+
+.success-container {
+  padding: 40px 80px;
+  display: flex;
+  justify-content: center;
+  background: var(--white);
+}
+
+.success-content {
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* ── SUCCESS HEADER ── */
+.success-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--cream-dk);
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--white);
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  color: var(--forest);
+  margin: 0 0 8px;
+}
+
+.success-subtitle {
+  color: var(--text-lt);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ── ORDER NUMBER BOX ── */
+.order-number-box {
+  background: linear-gradient(135deg, var(--cream) 0%, #faf9f7 100%);
+  border: 1px solid var(--cream-dk);
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.order-number-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-lt);
+  margin-bottom: 6px;
+}
+
+.order-number {
+  font-family: 'Courier New', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.copy-btn {
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: #c99563;
+}
+
+/* ── CONTENT GRID ── */
+.order-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+/* ── ITEMS SECTION ── */
+.order-items-section {
+  grid-column: 1;
+}
+
+.items-table-wrapper {
+  overflow-x: auto;
+  background: var(--white);
+  border: 1px solid var(--cream-dk);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.items-table thead {
+  border-bottom: 2px solid var(--gold);
+}
+
+.items-table th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--forest);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+}
+
+.items-table td {
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--cream-dk);
+  color: var(--text);
+}
+
+.items-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.items-table tbody tr:hover {
+  background: var(--cream);
+}
+
+.item-col-name {
+  font-weight: 500;
+  color: var(--forest);
+}
+
+.item-col-weight,
+.item-col-qty,
+.item-col-price {
+  text-align: center;
+}
+
+.item-col-total {
+  text-align: right;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+/* ── SUMMARY SECTION ── */
+.order-summary-section {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summary-card,
+.address-card,
+.payment-card {
+  background: var(--white);
+  border: 1px solid var(--cream-dk);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--forest);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-content,
+.address-content,
+.payment-content {
+  color: var(--text);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cream-dk);
+  color: var(--text-lt);
+}
+
+.summary-line:last-child {
+  border-bottom: none;
+}
+
+.summary-total {
+  font-weight: 700;
+  color: var(--forest);
+  font-size: 0.95rem;
+  padding-top: 12px;
+}
+
+.address-content p {
+  margin: 4px 0;
+  color: var(--text);
+}
+
+.address-content p:first-child {
+  font-weight: 600;
+  color: var(--forest);
+  margin-bottom: 8px;
+}
+
+.payment-content p {
+  margin: 0;
+  color: var(--text);
+}
+
+/* ── ACTION BUTTONS ── */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 32px;
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: #c99563;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--forest);
+  color: var(--cream);
+}
+
+.btn-secondary:hover {
+  background: #1f3a0f;
+  transform: translateY(-2px);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .success-container {
+    padding: 32px 60px;
+  }
+  
+  .order-content-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .order-items-section {
+    grid-column: auto;
+  }
+  
+  .order-summary-section {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .success-container {
+    padding: 24px 20px;
+  }
+
+  /* Stack main content and contact support vertically on small screens */
+  .success-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .success-content {
+    padding: 0;
+  }
+  
+  .success-header {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+  
+  .success-title {
+    font-size: 1.8rem;
+  }
+  
+  .success-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .success-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.6rem;
+  }
+  
+  .order-number-box {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .order-number {
+    font-size: 1.4rem;
+  }
+  
+  .copy-btn {
+    padding: 6px 12px;
+    font-size: 0.65rem;
+  }
+  
+  .order-content-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .items-table-wrapper {
+    padding: 12px;
+  }
+  
+  .items-table {
+    font-size: 0.75rem;
+  }
+  
+  .items-table th {
+    padding: 6px 8px;
+    font-size: 0.6rem;
+  }
+  
+  .items-table td {
+    padding: 8px 6px;
+  }
+  
+  .summary-card,
+  .address-card,
+  .payment-card {
+    padding: 12px;
+  }
+  
+  .section-title {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  
+  .summary-content,
+  .address-content,
+  .payment-content {
+    font-size: 0.8rem;
+  }
+  
+  .action-buttons {
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.7rem;
+  }
+}
+
+/* Ensure contact-support sits below and is centered on small screens */
+@media (max-width: 900px) {
+  .contact-support { width: 100%; text-align: center; margin-top: 18px; }
+}
+
+@media (max-width: 520px) {
+  /* Make the items table stack neatly on very small screens */
+  .items-table {
+    min-width: 0;
+    width: 100%;
+    border-collapse: separate;
+  }
+  .items-table-wrapper {
+    overflow-x: hidden;
+  }
+
+  /* Hide table header and present each row as a stacked card */
+  .items-table thead { display: none; }
+  .items-table tbody tr {
+    display: block;
+    border: 1px solid var(--cream-dk);
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: var(--white);
+  }
+
+  .items-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border: none;
+  }
+
+  .item-col-name { display: block; width: 100%; font-weight: 600; margin-bottom: 6px; }
+  .item-col-weight, .item-col-qty, .item-col-price, .item-col-total { text-align: right; }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+/* CMS order-complete eyebrow */
+.success-eyebrow {
+  margin: 12px 0 6px;
+  color: var(--gold);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}

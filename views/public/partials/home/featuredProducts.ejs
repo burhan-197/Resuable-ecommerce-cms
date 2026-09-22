@@ -1,0 +1,45 @@
+<% const section = homepage.featuredProducts; %>
+<section class="products">
+  <div class="products-header">
+    <div>
+      <% if (section.eyebrow) { %><div class="section-label"><%= section.eyebrow %></div><% } %>
+      <% if (section.heading || section.highlight) { %><h2 class="section-title"><%= section.heading %><% if (section.highlight) { %> <em><%= section.highlight %></em><% } %></h2><% } %>
+      <% if (section.subheading) { %><p class="section-subtitle section-subtitle-left"><%= section.subheading %></p><% } %>
+    </div>
+  </div>
+
+  <div class="products-grid">
+    <% featuredProducts.forEach(product => { const primaryVariant = product.variants?.[0] || {}; const primaryStock = Math.max(0, Number(primaryVariant.stock || 0)); %>
+    <div class="product-card" data-category="<%= product.category %>" role="link" tabindex="0" onclick="window.location.href='/products/<%= product.slug %>'" onkeydown="if (event.key === 'Enter' || event.key === ' ') window.location.href='/products/<%= product.slug %>'">
+      <div class="product-img-wrap">
+        <% if (product.images && product.images.length) { %>
+          <img src="<%= responsiveImageUrl(product.images[0], 640) %>" srcset="<%= responsiveImageSrcset(product.images[0], [320, 640, 960]) %>" sizes="(max-width: 700px) 50vw, 25vw" width="800" height="800" alt="<%= product.name %>" data-fallback="<%= product.emoji %>" loading="lazy" />
+        <% } else { %>
+          <%= product.emoji %>
+        <% } %>
+      </div>
+      <div class="product-info">
+        <div class="product-category"><%= product.categoryName || categoryLabel(product.category, storeCategories) %></div>
+        <div class="product-name"><%= product.name %></div>
+        <div class="product-weight"><%= product.displayWeight %></div>
+        <div class="product-footer">
+          <div>
+            <span class="product-price"><%= formatMoney(product.price, settings) %></span>
+          </div>
+          <button class="add-to-cart" type="button" onclick="event.stopPropagation();"
+                  data-id="<%= product.id %>"
+                  data-name="<%= product.name %>"
+                  data-category="<%= product.category %>"
+                  data-category-name="<%= product.categoryName || categoryLabel(product.category, storeCategories) %>"
+                  data-emoji="<%= product.emoji %>"
+                  data-slug="<%= product.slug %>"
+                  data-price="<%= product.price %>"
+                  data-weight="<%= primaryVariant.weight || product.displayWeight || 'Standard' %>"
+                  data-stock="<%= primaryStock %>"
+                  data-image="<%= product.images && product.images.length ? safeAssetUrl(product.images[0]) : '' %>"<% if (primaryStock <= 0) { %> disabled title="Currently unavailable" aria-label="<%= product.name %> is currently unavailable"<% } %>>+</button>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</section>

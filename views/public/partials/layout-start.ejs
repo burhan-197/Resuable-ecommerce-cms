@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <% const resolvedTitle = (typeof metaTitle !== 'undefined' && metaTitle) ? metaTitle : ((typeof title !== 'undefined' && title) ? title : (settings.seo.metaTitle || settings.store.name || 'Store')); %>
+  <% const resolvedDescription = (typeof metaDesc !== 'undefined' && metaDesc) ? metaDesc : (settings.seo.metaDescription || settings.store.description || ''); %>
+  <% const resolvedOgImage = (typeof ogImage !== 'undefined' && ogImage) ? ogImage : (settings.seo.socialImage || settings.store.logo || (settings.homepage && settings.homepage.hero ? settings.homepage.hero.image : '') || ''); %>
+  <title><%= resolvedTitle %></title>
+  <% if (typeof active !== 'undefined' && active === 'home' && settings.homepage && settings.homepage.hero && settings.homepage.hero.image) { %>
+    <link rel="preload" href="<%= responsiveImageUrl(settings.homepage.hero.image, 1600) %>" as="image" imagesrcset="<%= responsiveImageSrcset(settings.homepage.hero.image, [640, 960, 1280, 1600]) %>" imagesizes="100vw" fetchpriority="high">
+  <% } %>
+  <% if (!(typeof noCanonical !== 'undefined' && noCanonical)) { %>
+    <link rel="canonical" href="<%= typeof canonical !== 'undefined' && canonical ? canonical : siteOrigin + (typeof req_url !== 'undefined' ? req_url : '/') %>"/>
+  <% } %>
+  <% const resolvedFavicon = settings.store.favicon || settings.store.logo || ''; %>
+  <% if (resolvedFavicon) { %>
+    <link rel="icon" href="<%= resolvedFavicon %>"/>
+    <link rel="apple-touch-icon" href="<%= resolvedFavicon %>"/>
+  <% } %>
+  <meta name="description" content="<%= resolvedDescription %>" />
+  <% if (typeof robots !== 'undefined' && robots) { %>
+    <meta name="robots" content="<%= robots %>" />
+  <% } %>
+  <% const absoluteUrl = (value) => value || ''; %>
+
+  
+  <!-- Open Graph / Social Sharing Meta Tags -->
+  <meta property="og:title" content="<%= resolvedTitle %>"/>
+  <meta property="og:description" content="<%= resolvedDescription %>"/>
+  <% if (resolvedOgImage) { %><meta property="og:image" content="<%= absoluteUrl(resolvedOgImage) %>"/><% } %>
+  <meta property="og:type" content="<%= typeof product !== 'undefined' && product ? 'product' : 'website' %>"/>
+  <meta name="twitter:card" content="<%= resolvedOgImage ? 'summary_large_image' : 'summary' %>"/>
+  
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Critical CSS for hero and navbar (inline) -->
+  <style>
+    :root {
+      --forest: #1b3e28;
+      --forest2: #254d34;
+      --gold: #b8922a;
+      --gold-lt: #d4a94a;
+      --cream: #f5efe6;
+      --cream-dk: #ede4d6;
+      --sand: #c9b89a;
+      --text: #2a1f14;
+      --text-lt: #6b5a46;
+      --white: #fdfaf5;
+      --site-header-height: 72px;
+      --announcement-height: 0px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; width: 100%; }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); }
+    img { max-width: 100%; height: auto; display: block; }
+    
+    .announcement {
+      background: var(--forest);
+      color: var(--gold-lt);
+      text-align: center;
+      font-size: .78rem;
+      letter-spacing: .18em;
+      padding: 9px 20px;
+      font-weight: 500;
+    }
+    
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--cream-dk);
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 20px rgba(27,62,40,.06);
+    }
+    
+    .nav-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    
+    .nav-brand-link { text-decoration: none; display: flex; align-items: center; gap: 12px; min-width: 0; max-width: min(42vw, 460px); }
+    .nav-brand-logo { object-fit: contain; flex: 0 0 auto; display: block; }
+    .nav-brand-logo--small { width: 36px; height: 36px; }
+    .nav-brand-logo--medium { width: 46px; height: 46px; }
+    .nav-brand-logo--large { width: 56px; height: 56px; }
+    .nav-logo-image { display: none; }
+    .nav-brand { display: flex; flex-direction: column; justify-content: center; gap: 3px; line-height: 1.08; min-width: 0; }
+    .nav-brand-main { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.25rem, 2vw, 1.55rem); font-weight: 700; color: var(--forest); }
+    .nav-brand-sub { font-size: .62rem; letter-spacing: .22em; color: var(--gold); text-transform: uppercase; }
+    
+    .nav-menu { display: flex; align-items: center; gap: 32px; }
+    .nav-utility { display: flex; align-items: center; gap: 14px; }
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a, .dropdown-toggle {
+      text-decoration: none;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      font-weight: 500;
+      color: var(--text-lt);
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+    }
+    .nav-links a.active, .nav-links a:hover, .dropdown-toggle:hover { color: var(--forest); }
+    .nav-links a::after, .dropdown-toggle::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width .3s;
+    }
+    .nav-links a:hover::after, .nav-links a.active::after, .dropdown-toggle:hover::after { width: 100%; }
+    
+    .dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--white);
+      border: 1px solid var(--cream-dk);
+      min-width: 210px;
+      padding: 10px 0;
+      display: none;
+      z-index: 999;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 16px;
+      font-size: .78rem;
+      color: var(--text-lt);
+      text-transform: uppercase;
+    }
+    .dropdown-menu a:hover {
+      color: var(--forest);
+      background: rgba(212, 169, 74, 0.1);
+    }
+    .dropdown:hover .dropdown-menu { display: block; }
+    
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-cart-wrap { position: relative; }
+    .nav-cart-btn {
+      text-decoration: none;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      color: var(--text-lt);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+    }
+    .cart-count {
+      background: var(--gold);
+      color: #fff;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: .65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    
+    @media (max-width: 900px) {
+      .site-nav { padding: 0 16px; height: 76px; }
+      .nav-toggle { display: block; }
+      .nav-menu { position: absolute; top: 76px; left: 0; right: 0; background: var(--white); flex-direction: column; align-items: stretch; gap: 20px; padding: 20px 16px 24px; display: none; border-bottom: 1px solid var(--cream-dk); box-shadow: 0 10px 30px rgba(27,62,40,.08); }
+      .nav-menu.open { display: flex; }
+      .nav-links { flex-direction: column; align-items: stretch; gap: 6px; width: 100%; }
+    }
+    
+  </style>
+
+  <!-- Shared and page-specific CSS load normally to avoid flash of unstyled content -->
+  <link rel="stylesheet" href="/css/shared.css">
+  
+  <% if (css) { %>
+    <link rel="stylesheet" href="<%= css %>">
+  <% } %>
+  
+  <!-- Non-blocking Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"></noscript>
+  <%
+    const cmsTheme = settings.appearance || {};
+    const cmsColors = cmsTheme.colors || {};
+    const cmsTypography = cmsTheme.typography || {};
+    const cmsButtons = cmsTheme.buttons || {};
+    const cmsCards = cmsTheme.cards || {};
+  %>
+  <style id="cms-theme-settings">
+    :root {
+      --forest: <%= cmsColors.primary || '#1b3e28' %>;
+      --forest2: <%= cmsColors.secondary || '#254d34' %>;
+      --gold: <%= cmsColors.accent || '#b8922a' %>;
+      --gold-lt: <%= cmsColors.accent || '#b8922a' %>;
+      --cream: <%= cmsColors.pageBackground || '#f5efe6' %>;
+      --cream-dk: <%= cmsColors.border || '#ede4d6' %>;
+      --text: <%= cmsColors.mainText || '#2a1f14' %>;
+      --text-lt: <%= cmsColors.secondaryText || '#6b5a46' %>;
+      --white: <%= cmsColors.cardBackground || '#fdfaf5' %>;
+      --cms-navbar-bg: <%= cmsColors.navbarBackground || '#fdfaf5' %>;
+      --cms-navbar-text: <%= cmsColors.navbarText || '#6b5a46' %>;
+      --cms-footer-bg: <%= cmsColors.resolvedFooterBackground || '#111d16' %>;
+      --cms-footer-text: <%= cmsColors.resolvedFooterText || '#f5efe6' %>;
+      --cms-button-bg: <%= cmsColors.buttonBackground || '#1b3e28' %>;
+      --cms-button-text: <%= cmsColors.buttonText || '#f5efe6' %>;
+      --cms-success-bg: <%= cmsColors.success || '#2d7a4f' %>;
+      --cms-card-bg: <%= cmsColors.cardBackground || '#fdfaf5' %>;
+      --cms-card-border: <%= cmsColors.border || '#ede4d6' %>;
+      --cms-heading-font: <%= cmsTypography.headingFont || 'Cormorant Garamond, Georgia, serif' %>;
+      --cms-body-font: <%= cmsTypography.bodyFont || 'Jost, Arial, sans-serif' %>;
+      --cms-base-font-size: <%= cmsTypography.baseFontSize || 16 %>px;
+      --cms-button-radius: <%= cmsButtons.radius || '4px' %>;
+      --cms-card-radius: <%= cmsCards.radius || '4px' %>;
+    }
+    .btn-primary, .btn-add-cart, .btn-buy-now, .checkout-btn, .place-order-btn,
+    .newsletter-btn, .post-shop-btn, .cart-drawer-btn {
+      background: var(--cms-button-bg) !important;
+      color: var(--cms-button-text) !important;
+    }
+    .btn-primary, .btn-secondary, .btn-outline, .btn-ghost, .btn-add-cart, .btn-buy-now,
+    .btn-write-review, .checkout-btn, .continue-shopping-btn, .place-order-btn, .newsletter-btn,
+    .post-shop-btn, .quick-btn, .page-btn, .filter-toggle-btn, .review-filter-btn, .weight-btn,
+    .cart-drawer-btn { border-radius: var(--cms-button-radius) !important; }
+    .has-custom-button-colors {
+      background: var(--custom-button-bg) !important;
+      color: var(--custom-button-text) !important;
+    }
+    .has-custom-button-colors:hover,
+    .has-custom-button-colors:focus-visible {
+      background: var(--custom-button-hover-bg) !important;
+      color: var(--custom-button-hover-text) !important;
+    }
+    .product-card, .blog-card, .cat-card, .contact-card, .review-card, .testi-card, .value-card,
+    .policy-card, .shipping-card, .address-card, .summary-card, .payment-card, .post-shop-card {
+      border-radius: var(--cms-card-radius) !important;
+      background-color: var(--cms-card-bg) !important;
+      border-color: var(--cms-card-border) !important;
+    }
+  </style>
+</head>
+<body
+  data-currency-code="<%= settings.currency.code %>"
+  data-currency-symbol="<%= settings.currency.symbol %>"
+  data-currency-position="<%= settings.currency.position %>"
+  data-shipping-enabled="<%= settings.shipping.enabled ? 'true' : 'false' %>"
+  data-shipping-flat-enabled="<%= settings.shipping.flatRate.enabled ? 'true' : 'false' %>"
+  data-shipping-flat-rate="<%= settings.shipping.flatRate.amount %>"
+  data-shipping-free-enabled="<%= settings.shipping.freeShipping.enabled ? 'true' : 'false' %>"
+  data-shipping-free-threshold="<%= settings.shipping.freeShipping.threshold %>"
+>
+  <%- include('navbar', { active, cartCount }) %>
+  <main id="main-content">

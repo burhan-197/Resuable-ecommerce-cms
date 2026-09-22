@@ -1,0 +1,12 @@
+<% const section = homepage.promo; const image = section.image ? responsiveImageUrl(section.image, 960) : ''; const imageSrcset = section.image ? responsiveImageSrcset(section.image, [320, 640, 960, 1280]) : ''; const buttonStyle = section.buttonStyle || {}; %>
+<section class="home-promo <%= image ? '' : 'home-promo-no-image' %>">
+  <div class="home-promo-card">
+    <% if (image) { %><div class="home-promo-image"><img src="<%= image %>"<% if (imageSrcset) { %> srcset="<%= imageSrcset %>" sizes="(max-width: 800px) 100vw, 50vw"<% } %> alt="<%= section.heading || settings.store.name %>" loading="lazy" /></div><% } %>
+    <div class="home-promo-content">
+      <% if (section.eyebrow) { %><div class="section-label"><%= section.eyebrow %></div><% } %>
+      <% if (section.heading) { %><h2 class="section-title"><%= section.heading %></h2><% } %>
+      <% if (section.subheading) { %><p class="home-promo-text"><%= section.subheading %></p><% } %>
+      <% if (section.buttonText && section.buttonUrl) { %><a class="btn-primary <%= buttonStyle.useCustomColors ? 'has-custom-button-colors' : '' %>" href="<%= section.buttonUrl %>"<% if (buttonStyle.useCustomColors) { %> style="--custom-button-bg:<%= buttonStyle.background %>;--custom-button-text:<%= buttonStyle.text %>;--custom-button-hover-bg:<%= buttonStyle.hoverBackground %>;--custom-button-hover-text:<%= buttonStyle.hoverText %>"<% } %>><%= section.buttonText %> <span>→</span></a><% } %>
+    </div>
+  </div>
+</section>

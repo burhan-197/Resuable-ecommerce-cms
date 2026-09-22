@@ -1,0 +1,128 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+.policy-hero {
+  padding: 72px 80px 28px;
+  background: linear-gradient(180deg, rgba(27,62,40,.06) 0%, rgba(27,62,40,0) 100%);
+}
+
+.policy-hero-inner {
+  max-width: 920px;
+}
+
+.policy-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 1.08;
+  color: var(--forest);
+  margin: 10px 0 16px;
+}
+
+.policy-title em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.policy-intro {
+  max-width: 720px;
+  color: var(--text-lt);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.policy-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.policy-nav a {
+  text-decoration: none;
+  color: var(--forest);
+  background: rgba(212, 169, 74, 0.08);
+  border: 1px solid rgba(184,146,42,.18);
+  padding: 10px 16px;
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transition: transform .2s ease, background-color .2s ease, border-color .2s ease;
+}
+
+.policy-nav a:hover,
+.policy-nav a:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(212, 169, 74, 0.16);
+  border-color: rgba(184,146,42,.35);
+  outline: none;
+}
+
+.policy-page-content {
+  display: grid;
+  gap: 24px;
+  padding: 12px 80px 88px;
+}
+
+.policy-card {
+  max-width: 920px;
+  background: var(--white);
+  border: 1px solid var(--cream-dk);
+  box-shadow: 0 18px 40px rgba(27,62,40,.06);
+  padding: 30px;
+  scroll-margin-top: 110px;
+}
+
+.policy-card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.policy-kicker {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(27,62,40,.08);
+  color: var(--forest);
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.policy-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  color: var(--forest);
+}
+
+.policy-card p {
+  color: var(--text-lt);
+  line-height: 1.9;
+  font-size: .95rem;
+  margin-bottom: 14px;
+}
+
+.policy-card p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  html {
+    scroll-padding-top: 88px;
+  }
+
+  .policy-hero,
+  .policy-page-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .policy-card {
+    padding: 22px 18px;
+  }
+}

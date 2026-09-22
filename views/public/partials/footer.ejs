@@ -1,0 +1,16 @@
+<footer class="site-footer">
+  <% const footerContent=settings.content?.footer||{}; const policyContent=settings.content?.policies||{}; %>
+  <div class="footer-grid">
+    <div class="footer-brand footer-col footer-col--brand">
+      <% const footerBrandPrefs=settings.store.branding||{}; const showFooterLogo=footerBrandPrefs.showLogo!==false&&Boolean(settings.store.logo); const showFooterName=footerBrandPrefs.showName!==false&&Boolean(settings.store.name); const showFooterTagline=footerBrandPrefs.showTagline!==false&&Boolean(settings.store.tagline); const hasFooterBrand=showFooterLogo||showFooterName||showFooterTagline; const footerLogoSize=['small','medium','large','custom'].includes(footerBrandPrefs.logoSize)?footerBrandPrefs.logoSize:'medium'; const footerCustomLogoSize=Math.min(92,Math.max(40,(Number(footerBrandPrefs.logoCustomSize)||46)+12)); %>
+      <% if(hasFooterBrand){ %><div class="footer-brand-heading"><% if(showFooterLogo){ %><img src="<%= responsiveImageUrl(settings.store.logo,320) %>" alt="<%= settings.store.name||'Store' %> logo" class="footer-brand-logo footer-brand-logo--<%= footerLogoSize %>" <%- footerLogoSize==='custom'?`style="width:${footerCustomLogoSize}px;height:${footerCustomLogoSize}px"`:'' %>/><% } %><% if(showFooterName||showFooterTagline){ %><div class="nav-brand <%= !showFooterName&&showFooterTagline?'nav-brand--tagline-only':'' %>"><% if(showFooterName){ %><span class="nav-brand-main"><%= settings.store.name %></span><% } %><% if(showFooterTagline){ %><span class="nav-brand-sub footer-brand-tagline"><%= settings.store.tagline %></span><% } %></div><% } %></div><% } %>
+      <% if(footerContent.aboutText){ %><p class="footer-about"><%= footerContent.aboutText %></p><% } %>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-col footer-col--shop"><div class="footer-col-title"><%= footerContent.shopTitle||'Shop' %></div><ul class="footer-links"><% if(storeTopCategories&&storeTopCategories.length){ %><% storeTopCategories.forEach(category=>{ %><li><a href="/products/category/<%= category.slug %>"><%= category.name %></a></li><% }) %><% } else { %><li><a href="/products">All Products</a></li><% } %></ul></div>
+      <div class="footer-col footer-col--info"><div class="footer-col-title"><%= footerContent.informationTitle||'Information' %></div><ul class="footer-links"><li><a href="/policies#shipping-policy"><%= footerContent.shippingLinkLabel||'Shipping Policy' %></a></li><li><a href="/policies#return-policy"><%= footerContent.returnLinkLabel||'Return Policy' %></a></li><li><a href="/policies#privacy-policy"><%= footerContent.privacyLinkLabel||'Privacy Policy' %></a></li><% if(policyContent.terms?.enabled){ %><li><a href="/policies#terms-conditions"><%= footerContent.termsLinkLabel||'Terms & Conditions' %></a></li><% } %></ul></div>
+    </div>
+    <div class="footer-col footer-col--contact"><div class="footer-col-title"><%= footerContent.contactTitle||'Store' %></div><div class="footer-contact-item">Browse products and place guest orders online.</div></div>
+  </div>
+  <div class="footer-bottom"><div><%= footerContent.copyrightText||(`© ${new Date().getFullYear()} ${settings.store.name||'Store'}. All rights reserved.`) %></div></div>
+</footer>
