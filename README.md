@@ -67,7 +67,7 @@ The **Full Edition** adds:
 
 ### Get the Full Version
 
-**[Buy StorefrontCMS Full Edition](PASTE_PURCHASE_LINK_HERE)**
+**[Buy StorefrontCMS Full Edition](https://whop.com/burhan-builds/reusable-ecommerce-cms-website-with-admin-panel/)**
 
 ## Quick Start
 
