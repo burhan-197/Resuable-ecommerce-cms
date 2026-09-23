@@ -1,4 +1,12 @@
+![Node.js](https://img.shields.io/badge/Node.js-18+-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
+
 # StorefrontCMS Ecommerce CMS Lite
+
+> 🚀 **Want the full version?** Stripe, PayPal, Google Sign-In, SMTP, 
+> white-label ready → [Get the Full Edition on Whop](https://whop.com/burhan-builds/reusable-ecommerce-cms-website-with-admin-panel/)
 
 A free, reusable **Node.js ecommerce CMS starter** for electronics, accessories, food, beauty and other product stores.
 
@@ -64,10 +72,6 @@ The **Full Edition** adds:
 - Advanced SEO
 - Analytics and reports
 - Additional CMS settings and integrations
-
-### Get the Full Version
-
-**[Buy StorefrontCMS Full Edition](https://whop.com/burhan-builds/reusable-ecommerce-cms-website-with-admin-panel/)**
 
 ## Quick Start
 
